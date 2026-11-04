@@ -19,7 +19,7 @@ body{display:flex;flex-direction:column;background:var(--bg);color:var(--ink);fo
 .bn{background:#5a0409;color:#fff;padding:8px 14px;font-size:14px;text-align:center}.bn button{margin-left:8px;border:0;border-radius:99px;padding:4px 12px;font:inherit;cursor:pointer}
 .view{flex:1;min-height:0;overflow:auto;position:relative}
 .pg{max-width:780px;margin:0 auto;padding:14px 14px 28px}
-nav{flex:none;display:grid;grid-template-columns:repeat(5,1fr);border-top:1px solid var(--line);background:var(--bg)}
+nav{flex:none;display:grid;grid-template-columns:repeat(6,1fr);border-top:1px solid var(--line);background:var(--bg)}
 nav button{background:none;border:0;color:var(--mut);padding:8px 0 9px;font:inherit;font-size:11px;display:flex;flex-direction:column;align-items:center;gap:1px;cursor:pointer}
 nav button b{font-size:20px;font-weight:400;filter:grayscale(1)}nav button.on{color:var(--red2);box-shadow:inset 0 3px 0 var(--red)}nav button.on b{filter:none}
 h2,h3{margin:0}.m{color:var(--mut)}
@@ -117,7 +117,7 @@ h2{font-size:26px;font-weight:800;line-height:1.12;letter-spacing:-.02em}h3{font
 .nw h3{font-family:var(--fs);font-size:22px;font-weight:700;line-height:1.2;letter-spacing:-.01em;margin:6px 0}.nw p{font-family:var(--fs);font-size:16px;line-height:1.6}
 .card,.chip,.ib,.btn,.cch,.cgd,.seg button{transition:background .2s,border-color .2s,color .2s,transform .15s,box-shadow .2s,filter .2s}
 
-nav{position:relative}#ni{position:absolute;top:0;left:0;width:20%;height:3px;background:var(--red);border-radius:0 0 3px 3px;transition:transform .32s cubic-bezier(.2,.8,.2,1),opacity .2s}nav button.on{box-shadow:none}
+nav{position:relative}#ni{position:absolute;top:0;left:0;width:16.6667%;height:3px;background:var(--red);border-radius:0 0 3px 3px;transition:transform .32s cubic-bezier(.2,.8,.2,1),opacity .2s}nav button.on{box-shadow:none}
 .view.enter .pg>#lst{animation:none!important}
 .view.enter .ev{animation:vin .34s cubic-bezier(.2,.7,.2,1) both;animation-delay:calc(var(--i,0)*35ms)}
 .toast{animation:tin .25s ease both,tout .3s ease 2.5s forwards}@keyframes tout{to{opacity:0;transform:translate(-50%,6px)}}
@@ -181,6 +181,22 @@ button:not(:disabled):active,.btn:active{transform:scale(.97);transition:transfo
 .ev:focus-visible{outline:2px solid var(--red2);outline-offset:2px}
 .ev{content-visibility:auto;contain-intrinsic-size:auto 104px}
 @media(prefers-reduced-motion:reduce){button:not(:disabled):active,.btn:active,.ev:active{transform:none}}
+
+/* ===== v10 catálogo ===== */
+.hero10{position:relative;overflow:hidden;color:#fff;background:#1a1a1d url(https://images.unsplash.com/photo-1552674605-db6ffd4facb5?auto=format&fit=crop&w=1200&q=70) center/cover;padding:46px 18px 40px}
+.hero10::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,10,11,.55),rgba(10,10,11,.8))}
+.hero10>*{position:relative;max-width:780px;margin-left:auto;margin-right:auto}
+.hero10 h1{font:italic 900 clamp(32px,8vw,52px)/1.05 var(--fh,"Arial Black"),sans-serif;margin:0 0 8px;letter-spacing:-.02em}.hero10 h1 em{color:#FF5A5F;font-style:italic}
+.hero10 p{margin:0 0 18px;font-size:16px;opacity:.92}
+.hfind{display:grid;gap:8px;grid-template-columns:1fr}@media(min-width:620px){.hfind{grid-template-columns:2fr 1fr auto}}
+.hfind input,.hfind select{padding:13px 12px;border-radius:10px;border:0;font:inherit;background:#fff;color:#16161A;min-width:0}
+.sec10{max-width:780px;margin:0 auto;padding:22px 14px 4px}.sec10 h2{margin:0 0 12px;font-size:20px}
+.tiles{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}@media(min-width:620px){.tiles{grid-template-columns:repeat(4,1fr)}}
+.tile{position:relative;height:104px;border-radius:12px;overflow:hidden;border:0;color:#fff;font:inherit;font-weight:800;text-align:left;padding:10px;display:flex;align-items:flex-end;background:#222 center/cover;cursor:pointer}
+.tile::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 30%,rgba(0,0,0,.75))}.tile span{position:relative}
+.fseg{display:flex;gap:6px;margin:0 0 10px}.fseg button{flex:1;padding:10px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink);font:inherit;font-weight:700}.fseg button.on{background:var(--red);border-color:var(--red);color:#fff}
+.ab h2{margin:22px 0 6px}.ab .how{display:grid;gap:10px}.ab .how>div{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px}
+.ab .team{display:flex;gap:10px;flex-wrap:wrap}.ab .team>div{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 16px}.ab .team span{display:block;color:var(--mut);font-size:13px}
 </style></head><body>
 <div class="top"><div><div class="logo">V<i>y</i>bra</div><small class="slg">Conecta con el deporte</small></div><div class="tr"><div id="clk"></div><button class="ib" id="th" data-a="theme" aria-label="Cambiar entre modo claro y oscuro" title="Modo claro / oscuro"></button><button class="dd" data-a="drawer" aria-label="Servicios">Servicios ▾</button></div></div>
 <div id="bn"></div><div class="view" id="view"></div><nav id="nav"></nav><div id="modal"></div><div id="toast"></div>
@@ -198,7 +214,7 @@ const FC=['Horarios','Recorrido','Premios','General'],NC=['Salud','Deporte','Nut
 const PV=Object.fromEntries('A Coruña:43.37:-8.40|Álava:42.85:-2.67|Albacete:38.99:-1.86|Alicante:38.35:-0.48|Almería:36.84:-2.46|Asturias:43.36:-5.85|Ávila:40.66:-4.70|Badajoz:38.88:-6.97|Barcelona:41.39:2.17|Bizkaia:43.26:-2.93|Burgos:42.34:-3.70|Cáceres:39.47:-6.37|Cádiz:36.53:-6.29|Cantabria:43.46:-3.81|Castellón:39.99:-0.04|Ceuta:35.89:-5.32|Ciudad Real:38.99:-3.93|Córdoba:37.89:-4.78|Cuenca:40.07:-2.14|Gipuzkoa:43.32:-1.98|Girona:41.98:2.82|Granada:37.18:-3.60|Guadalajara:40.63:-3.17|Huelva:37.26:-6.94|Huesca:42.14:-0.41|Illes Balears:39.57:2.65|Jaén:37.78:-3.79|La Rioja:42.47:-2.45|Las Palmas:28.12:-15.43|León:42.60:-5.57|Lleida:41.62:0.62|Lugo:43.01:-7.56|Madrid:40.42:-3.70|Málaga:36.72:-4.42|Melilla:35.29:-2.94|Murcia:37.99:-1.13|Navarra:42.82:-1.64|Ourense:42.34:-7.86|Palencia:42.01:-4.53|Pontevedra:42.43:-8.64|Salamanca:40.97:-5.66|Santa Cruz de Tenerife:28.47:-16.25|Segovia:40.95:-4.12|Sevilla:37.39:-5.98|Soria:41.76:-2.47|Tarragona:41.12:1.25|Teruel:40.34:-1.11|Toledo:39.86:-4.02|Valencia:39.47:-0.38|Valladolid:41.65:-4.72|Zamora:41.50:-5.75|Zaragoza:41.65:-0.88|Portugal:39.6:-8|Andorra:42.55:1.55|Fuera de España:40:-3'.split('|').map(s=>{const[n,a,o]=s.split(':');return[n,[+a,+o]]}));
 
 let S={ev:[],all:[],news:[],live:[],posts:[],cal:[],notes:[],me:null,sub:null,set:{price:9,currency:'EUR',period:'mes',demo:false},svcs:[]};
-let nbTab='news',fcat='',accK='org',reported=new Set(),calSel='',dfrom='',dto='',lastKey='',tab='mapa',page=null,region='Andalucía',sport='',dfil='',ord='cierre',q='',user=null,role='',orgName='',CODE='',loaded=false,loadErr=false,drawer=false,replyTo=null,calM=new Date(),calDay='',authMode='in',pending=null,cdT=null,MAP=null,fb={Z:7,C:[37.4,-4.7]};
+let nbTab='news',fcat='',accK='org',reported=new Set(),calSel='',dfrom='',dto='',lastKey='',tab='inicio',page=null,region='España',sport='',dfil='',ord='cierre',q='',user=null,role='',orgName='',CODE='',loaded=false,loadErr=false,drawer=false,replyTo=null,calM=new Date(),calDay='',authMode='in',pending=null,cdT=null,MAP=null,fb={Z:7,C:[37.4,-4.7]};
 try{CODE=sessionStorage.getItem('vy')||'';JSON.parse(sessionStorage.getItem('vyrep')||'[]').forEach(function(i){reported.add(i)})}catch(e){}
 const $=i=>document.getElementById(i);
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -244,7 +260,7 @@ const dOk=e=>{if(dfrom&&e.dt<dfrom)return false;if(dto&&e.dt>dto)return false;if
 if(dfil=='7')return df>=0&&df<=7;if(dfil=='mes')return e.dt.slice(0,7)==t.slice(0,7);if(dfil=='c7'){const n=dLeft(e);return n!==null&&n>=0&&n<=7}
 if(dfil=='fs'){const w=d.getDay(),sat=new Date(d);sat.setDate(d.getDate()+((6-w+7)%7));if(w==0)sat.setDate(d.getDate()-1);const sun=new Date(sat);sun.setDate(sat.getDate()+1);return x>=sat&&x<=sun&&x>=d}return true};
 let showClosed=false;
-const vis=e=>(!sport||e.sp==sport)&&dOk(e)&&qOk(e)&&(showClosed||(regSt(e)!='cerrada'&&regSt(e)!='probablemente_cerrada'));
+const vis=e=>(!sport||e.sp==sport)&&(!fedF||(fedF=='F')==isFed(e))&&dOk(e)&&qOk(e)&&(showClosed||(regSt(e)!='cerrada'&&regSt(e)!='probablemente_cerrada'));
 const sorted=()=>{const l=S.ev.filter(vis);if(ord=='fecha')return l.sort((a,b)=>a.dt.localeCompare(b.dt)||a.nm.localeCompare(b.nm));
 return l.sort((a,b)=>{const x=dLeft(a),y=dLeft(b),ax=x!==null&&x>=0,ay=y!==null&&y>=0;if(ax&&ay)return x-y||a.dt.localeCompare(b.dt);if(ax)return -1;if(ay)return 1;return a.dt.localeCompare(b.dt)})};
 const fsel=(k,pairs,cur)=>`<select class="fs" data-fs="${k}" aria-label="${esc(pairs[0][1])}">${pairs.map(p=>`<option value="${esc(p[0])}" ${p[0]==cur?'selected':''}>${esc(p[1])}</option>`).join('')}</select>`;
@@ -300,7 +316,7 @@ const popList=()=>{let a=(S.pop||[]).filter(x=>+x.n>0),fb=false;if(!a.length){fb
 const ntHead=()=>`<div class="nsw" role="tablist"><button class="${nbTab=='news'?'on':''}" data-a="nbt" data-v="news">Noticias</button><button class="${nbTab=='pop'?'on':''}" data-a="nbt" data-v="pop">Populares</button></div>`;
 const tk=()=>{if(nbTab=='pop'){const p=popList();if(!p.a.length)return '<div class="m" style="padding:14px;font-size:13px">Aún no hay pruebas con participantes.</div>';const it=p.a.map((x,i)=>`<div class="ni pp" data-a="ev" data-v="${esc(x.id)}"><span class="rk">${i+1}</span><small>${esc(x.sp)}${p.fb?' · cierra pronto':''}</small><b>${esc(x.nm)}</b><span>${p.fb?cdTxt(x):x.n+(x.n==1?' participa':' participan')+' · '+fs_(x.dt)}</span></div>`).join('');return p.a.length<4?`<div class="tk st">${it}</div>`:`<div class="tk" style="animation-duration:${Math.max(p.a.length*5,24)}s">${it}${it}</div>`}
 const a=feed();if(!a.length)return '<div class="m" style="padding:14px;font-size:13px">El equipo de Vybra publicará aquí las noticias.</div>';const it=a.map(x=>`<div class="ni" data-a="tab" data-v="noticias"><small>${x.k}</small><b>${esc(x.t)}</b><span>${esc(x.x)}</span></div>`).join('');return a.length<4?`<div class="tk st">${it}</div>`:`<div class="tk" style="animation-duration:${Math.max(a.length*5,20)}s">${it}${it}</div>`};
-const legalFoot=()=>'<p class="m" style="font-size:12px;margin-top:18px"><span class="lk" data-a="legal">Privacidad y aviso legal</span></p>';
+const legalFoot=()=>'<p class="m" style="font-size:12px;margin-top:18px"><span class="lk" data-a="about">Sobre nosotros</span> · <span class="lk" data-a="legal">Privacidad y aviso legal</span></p>';
 /* ---- vistas: mapa, eventos ---- */
 const REGS=['Andalucía','España','Portugal','Andorra'],RLAB=r=>r=='España'?'Toda España':r;
 const RC={'Andalucía':[[-4.7,37.4],6.6],'España':[[-3.7,40.2],5.2],'Portugal':[[-8.0,39.6],5.6],'Andorra':[[1.55,42.55],9.6]};
@@ -312,7 +328,17 @@ function listHtml(){if(!loaded&&!loadErr)return '<div class="sk"></div>'.repeat(
 const monthChips=()=>{const n=new Date(),o=[];for(let i=0;i<9;i++){const d=new Date(n.getFullYear(),n.getMonth()+i,1),y=d.getFullYear(),mo=p2(d.getMonth()+1),last=new Date(y,d.getMonth()+1,0).getDate(),a=y+'-'+mo+'-01',b=y+'-'+mo+'-'+p2(last);o.push(`<button class="chip ${dfrom==a&&dto==b?'on':''}" data-a="month" data-v="${a}|${b}">${d.toLocaleDateString('es-ES',{month:'short'}).replace('.','')}${i==0||d.getMonth()==0?' '+String(y).slice(2):''}</button>`)}return '<div class="mrow">'+o.join('')+'</div>'};
 const closedN=()=>S.ev.filter(e=>{const s=regSt(e);return s=='cerrada'||s=='probablemente_cerrada'}).length;
 const dateUI=()=>`${monthChips()}<div class="cl"><label class="ck"><input type="checkbox" data-a="tgc" ${showClosed?'checked':''}><span>Mostrar también inscripciones cerradas (${closedN()})</span></label></div><div class="dt2"><span>Fechas</span><input type="date" data-fd="from" value="${esc(dfrom)}" aria-label="Desde"><span>a</span><input type="date" data-fd="to" value="${esc(dto)}" aria-label="Hasta">${dfrom||dto?'<button class="x" data-a="cleard">Quitar fechas</button>':''}</div>`;
-function vEv(){return `<div class="pg"><div class="seg" id="rg2">${regSeg()}</div><div style="display:flex;flex-wrap:wrap;gap:6px;margin:0 0 10px"><input id="q" placeholder="Buscar prueba o municipio" value="${esc(q)}" aria-label="Buscar">${fsel('sport',SPP,sport)}${fsel('dfil',DFP,dfil)}${fsel('ord',ORP,ord)}</div><div id="df">${dateUI()}</div><p class="m" style="margin:0 0 10px;font-size:13px" id="lcnt">${sorted().length} pruebas</p><div id="lst">${listHtml()}</div>${legalFoot()}</div>`}
+
+let fedF='';
+const fedSeg=()=>`<div class="fseg" id="fseg"><button class="${!fedF?'on':''}" data-a="fedf" data-v="">Todas</button><button class="${fedF=='P'?'on':''}" data-a="fedf" data-v="P">Populares</button><button class="${fedF=='F'?'on':''}" data-a="fedf" data-v="F">Federadas</button></div>`;
+const isFed=e=>/federad/i.test(e.fed||'');
+function vInicio(){const up=S.ev.filter(e=>e.dt>=today()).sort((a,b)=>a.dt.localeCompare(b.dt)).slice(0,6);
+return `<div class="hero10"><h1>Conecta con el <em>deporte</em></h1><p>Todas las carreras populares y federadas de España, con su organizador y su web de inscripción.</p><div class="hfind"><input id="hq" placeholder="Prueba o municipio" aria-label="Buscar prueba o municipio">${fsel('hs',SPP,'')}<button class="btn" data-a="srch">Buscar carreras</button></div></div>
+<div class="sec10"><h2>Elige tu deporte</h2><div class="tiles"><button class="tile" data-a="psp" data-v="Atletismo" style="background-image:url(https://images.unsplash.com/photo-1452626038306-9aae5e071dd3?auto=format&fit=crop&w=500&q=70)"><span>Atletismo</span></button><button class="tile" data-a="psp" data-v="Trail" style="background-image:url(https://images.unsplash.com/photo-1456613820599-bfe244172af5?auto=format&fit=crop&w=500&q=70)"><span>Trail</span></button><button class="tile" data-a="psp" data-v="Ciclismo" style="background-image:url(https://images.unsplash.com/photo-1517649763962-0c623066013b?auto=format&fit=crop&w=500&q=70)"><span>Ciclismo</span></button><button class="tile" data-a="psp" data-v="BTT" style="background-image:url(https://images.unsplash.com/photo-1575548393466-0df1618ba410?auto=format&fit=crop&w=500&q=70)"><span>BTT</span></button><button class="tile" data-a="psp" data-v="Triatlón" style="background-image:url(https://images.unsplash.com/photo-1660717328578-12f11e8473bf?auto=format&fit=crop&w=500&q=70)"><span>Triatlón</span></button><button class="tile" data-a="psp" data-v="Natación" style="background-image:url(https://images.unsplash.com/photo-1535368294342-b2ac3bd2fa7b?auto=format&fit=crop&w=500&q=70)"><span>Natación</span></button><button class="tile" data-a="psp" data-v="Marcha" style="background-image:url(https://images.unsplash.com/photo-1598609644050-27130cad94f6?auto=format&fit=crop&w=500&q=70)"><span>Marcha</span></button><button class="tile" data-a="psp" data-v="Otros" style="background-image:url(https://images.unsplash.com/photo-1596727362302-b8d891c42ab8?auto=format&fit=crop&w=500&q=70)"><span>Otros</span></button></div></div>
+<div class="sec10"><h2>Próximas carreras</h2>${loaded?(up.length?up.map(cardH).join(''):'<p class="m">Pronto habrá más pruebas.</p>'):'<div class="sk"></div>'.repeat(3)}<button class="btn ghost" style="margin-top:6px" data-a="tab" data-v="eventos">Ver todas las pruebas</button></div>
+<div class="sec10"><h2>Sin comisiones por inscripción</h2><p class="m">Te inscribes siempre en la web oficial del organizador. Con «Participo» guardas la prueba en tu calendario y ves cuándo cierra la inscripción.</p><p class="m"><span class="lk" data-a="about">Sobre nosotros</span></p></div>${legalFoot()}`}
+function vAbout(){return `<div class="back" data-a="back">← Volver</div><div class="pg ab"><h2 style="margin-top:6px">Sobre nosotros</h2><p>Vybra nace para que cualquier persona de España pueda encontrar, en un solo sitio, las carreras populares y federadas de su deporte: dónde son, cuándo son, quién las organiza y cómo inscribirse.</p><h2>Qué hacemos</h2><div class="how"><div><b>Sin comisiones por inscripción</b><p class="m" style="margin:4px 0 0">Te inscribes siempre con el organizador. Vybra no cobra por apuntarte a una carrera.</p></div><div><b>Datos contrastados</b><p class="m" style="margin:4px 0 0">Web de inscripción y organizador verificados en dos fuentes independientes antes de marcar una prueba como verificada.</p></div><div><b>Tu calendario</b><p class="m" style="margin:4px 0 0">Con «Participo» guardas tus pruebas y ves cuándo se cierra la inscripción de cada una.</p></div></div><h2>Cómo nos financiamos</h2><p>Con la suscripción de deportista (9 €/mes), que activa tu calendario personal y los avisos de cierre de inscripción.</p><h2>El equipo</h2><div class="team"><div><b>Ángel Peralta Barba</b><span>Cofundador</span></div><div><b>Jesús Chamorro</b><span>Cofundador</span></div></div><h2>Contacto</h2><p>¿Organizas una carrera o has visto un dato incorrecto? Escríbenos y lo corregimos.</p><a class="btn" href="mailto:angelperaltabarba10@gmail.com">Escribir a Vybra</a>${legalFoot()}</div>`}
+function vEv(){return `<div class="pg">${fedSeg()}<div class="seg" id="rg2">${regSeg()}</div><div style="display:flex;flex-wrap:wrap;gap:6px;margin:0 0 10px"><input id="q" placeholder="Buscar prueba o municipio" value="${esc(q)}" aria-label="Buscar">${fsel('sport',SPP,sport)}${fsel('dfil',DFP,dfil)}${fsel('ord',ORP,ord)}</div><div id="df">${dateUI()}</div><p class="m" style="margin:0 0 10px;font-size:13px" id="lcnt">${sorted().length} pruebas</p><div id="lst">${listHtml()}</div>${legalFoot()}</div>`}
 
 /* ---- ficha de la prueba ---- */
 const calBtns=x=>`<div class="row"><a class="btn ghost" href="${esc(gcal(x))}" target="_blank" rel="noopener">${ic('calplus',18)} Google Calendar</a><button class="btn ghost" data-a="ics1" data-v="${esc(eidOf(x))}">${ic('calplus',18)} Apple Calendar (.ics)</button></div>`;
@@ -416,12 +442,12 @@ d.innerHTML='<div class="cb" data-a="none" role="dialog" aria-label="Suscripció
 function banner(){var b=$('bn');if(loadErr){b.className='bn';b.innerHTML='No se pudo conectar con el servidor. <button data-a="retry">Reintentar</button>'}else{b.className='';b.innerHTML=''}}
 function put(id,html,fade){var el=$(id);if(!el)return false;el.innerHTML=html;tickCd();if(fade){el.classList.remove('fi');void el.offsetWidth;el.classList.add('fi')}return true}
 function renderHead(){$('th').innerHTML=ic(document.documentElement.dataset.theme=='light'?'moon':'sun',20)}
-const NAVT=[['mapa','map','Mapa'],['eventos','list','Pruebas'],['cal','cal','Calendario'],['noticias','news','Noticias'],['acc','user','Entrar']];
+const NAVT=[['inicio','list','Inicio'],['mapa','map','Mapa'],['eventos','list','Pruebas'],['cal','cal','Calendario'],['noticias','news','Noticias'],['acc','user','Entrar']];
 function renderNav(){var n=$('nav');if(!n.dataset.b){n.dataset.b='1';n.innerHTML=NAVT.map(function(t){return '<button data-a="tab" data-v="'+t[0]+'">'+ic(t[1],22)+'<span>'+t[2]+'</span></button>'}).join('')+'<i id="ni"></i>'}
-var bs=n.querySelectorAll('button');[].forEach.call(bs,function(b,i){b.classList.toggle('on',tab==NAVT[i][0]&&!page)});bs[4].lastChild.textContent=user?'Cuenta':'Entrar';
+var bs=n.querySelectorAll('button');[].forEach.call(bs,function(b,i){b.classList.toggle('on',tab==NAVT[i][0]&&!page)});bs[5].lastChild.textContent=user?'Cuenta':'Entrar';
 var ix=0;NAVT.forEach(function(t,i){if(t[0]==tab)ix=i});var ni=$('ni');ni.style.transform='translateX('+ix*100+'%)';ni.style.opacity=page?0:1}
 function render(){clearInterval(cdT);banner();renderHead();renderNav();
-var vw=$('view'),top=vw.scrollTop,V=page?({ev:vEvPage,sub:vSub,auth:vAuthPage,legal:vLegal})[page.k]():({mapa:vMapa,eventos:vEv,cal:vCal,noticias:vNews,acc:vAcc})[tab]();
+var vw=$('view'),top=vw.scrollTop,V=page?({ev:vEvPage,sub:vSub,auth:vAuthPage,legal:vLegal,about:vAbout})[page.k]():({inicio:vInicio,mapa:vMapa,eventos:vEv,cal:vCal,noticias:vNews,acc:vAcc})[tab]();
 var keep=(tab=='mapa'&&!page);if(!keep)killMap();var key=tab+'|'+(page?page.k+':'+(page.id||''):''),ent=key!==lastKey;lastKey=key;
 vw.innerHTML=V;$('modal').innerHTML=drawer?vDrawer():'';vw.classList.remove('enter');
 if(ent){[].forEach.call(vw.querySelectorAll('.pg>*'),function(el,i){el.style.setProperty('--i',Math.min(i,8))});[].forEach.call(vw.querySelectorAll('.ev'),function(el,i){el.style.setProperty('--i',Math.min(i,10))});vw.scrollTop=0;void vw.offsetWidth;vw.classList.add('enter')}else vw.scrollTop=top;
@@ -447,6 +473,10 @@ if(a=='z'){fb.Z=Math.max(4,Math.min(17,fb.Z+ +v));fbDraw();return}
 if(a=='theme'){setTheme(document.documentElement.dataset.theme=='light'?'dark':'light');renderHead();var sv=$('th').querySelector('svg');if(sv)sv.classList.add('rot');if(tab=='mapa'&&!page)initMap();return}
 if(a=='celclose'){var c=$('cel');if(c)c.remove();return}
 if(a=='none')return;
+if(a=='psp'){sport=v;fedF='';tab='eventos';page=null;render();return}
+if(a=='fedf'){fedF=v;put('fseg',fedSeg());updList();return}
+if(a=='srch'){q=($('hq')||{}).value||'';sport=($('hs')||{}).value||'';tab='eventos';page=null;render();return}
+if(a=='about'){page={k:'about'};render();return}
 if(a=='tab'){tab=v;page=null;drawer=false;render();return}
 if(a=='month'){var mm2=v.split('|');if(dfrom==mm2[0]&&dto==mm2[1]){dfrom='';dto=''}else{dfrom=mm2[0];dto=mm2[1]}updFilters();return}
 if(a=='cleard'){dfrom='';dto='';updFilters();return}
@@ -524,7 +554,7 @@ else if(k=='svc'){var sv=SERV.find(function(z){return z.id==f.dataset.s});await 
 else if(k=='priv'){await rpc('privacy_request',{p_email:d.em.trim()});toast('Solicitud enviada');full=false}
 if(full){if(k=='staff'||k=='login'||k=='signup')lastKey='';render()}}catch(x){toast(x.message||'Algo ha fallado')}finally{if(btn)btn.classList.remove('busy')}});
 /* ---- filtros y búsqueda ---- */
-document.addEventListener('change',function(e){var kd=e.target.dataset.fd;if(kd){if(kd=='from')dfrom=e.target.value;else dto=e.target.value;if($('lst'))updList();else if(tab=='mapa'&&!page)refreshMap();return}var k=e.target.dataset.fs;if(!k)return;var v=e.target.value;if(k=='sport')sport=v;else if(k=='dfil')dfil=v;else if(k=='ord')ord=v;
+document.addEventListener('change',function(e){var kd=e.target.dataset.fd;if(kd){if(kd=='from')dfrom=e.target.value;else dto=e.target.value;if($('lst'))updList();else if(tab=='mapa'&&!page)refreshMap();return}var k=e.target.dataset.fs;if(!k||k=='hs')return;var v=e.target.value;if(k=='sport')sport=v;else if(k=='dfil')dfil=v;else if(k=='ord')ord=v;
 if(tab=='mapa'&&!page)refreshMap();else if($('lst'))updList();else render()});
 document.addEventListener('input',function(e){if(e.target.id!='q')return;q=e.target.value;if(tab=='mapa'&&!page)refreshMap();else if($('lst'))updList()});
 /* ---- arranque ---- */
