@@ -1,0 +1,38 @@
+# Publica la web en IONOS Hosting Plus por SFTP cada vez que se actualiza main.
+# Necesita 3 secretos en GitHub (Settings > Secrets and variables > Actions):
+#   IONOS_SFTP_HOST, IONOS_SFTP_USER, IONOS_SFTP_PASSWORD
+# Si faltan, el trabajo termina sin error y no sube nada.
+name: Publicar en IONOS
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      HOST: ${{ secrets.IONOS_SFTP_HOST }}
+      SFTP_USER: ${{ secrets.IONOS_SFTP_USER }}
+      PASS: ${{ secrets.IONOS_SFTP_PASSWORD }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Comprobar secretos
+        id: chk
+        run: |
+          if [ -z "$HOST" ] || [ -z "$SFTP_USER" ] || [ -z "$PASS" ]; then
+            echo "Faltan los secretos de IONOS: no se sube nada."
+            echo "ready=no" >> "$GITHUB_OUTPUT"
+          else
+            echo "ready=yes" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Subir index.html por SFTP
+        if: steps.chk.outputs.ready == 'yes'
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.IONOS_SFTP_HOST }}
+          username: ${{ secrets.IONOS_SFTP_USER }}
+          password: ${{ secrets.IONOS_SFTP_PASSWORD }}
+          port: 22
+          source: "index.html"
+          target: "/"
+          overwrite: true
