@@ -182,6 +182,37 @@ button:not(:disabled):active,.btn:active{transform:scale(.97);transition:transfo
 .ev{content-visibility:auto;contain-intrinsic-size:auto 104px}
 @media(prefers-reduced-motion:reduce){button:not(:disabled):active,.btn:active,.ev:active{transform:none}}
 
+/* calendario a lo grande */
+.calmain{padding:10px 8px}
+@media(min-width:900px){
+.pgp.pgc{display:block}
+.pgc>*{margin-bottom:12px!important}
+.calw{display:grid;grid-template-columns:minmax(0,2.2fr) minmax(320px,1fr);gap:18px;align-items:start}
+.calmain{padding:18px 20px}
+.calmain .cmt{font-family:var(--fh);font-size:26px;display:inline-block}
+.calmain .cmt::first-letter{text-transform:uppercase}
+.calmain .cgh{font-size:13px;font-weight:700;gap:8px;margin:10px 0 8px}
+.calmain .cg{gap:8px}
+.calmain .cgd{aspect-ratio:auto;min-height:clamp(92px,11vh,130px);padding:8px 9px;border-radius:12px;display:flex;flex-direction:column;gap:3px;transition:transform .15s,box-shadow .15s}
+.calmain .cgd:not(.off):hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(0,0,0,.1)}
+.calmain .cgd .dn{font-size:15px;font-weight:700}
+.calmain .cgd.has::after{display:none}
+.calmain .cgd.has{background:color-mix(in srgb,var(--red) 7%,var(--card))}
+.calmain .cgd.sel{background:var(--red)}
+.calside{position:sticky;top:76px;max-height:calc(100vh - 150px);overflow:auto;display:flex;flex-direction:column;gap:12px;padding-right:2px}
+.calside>*{margin:0!important}
+}
+/* ===== ancho completo: calendario, tablón, cuenta y paneles (admin, organización, redacción) ===== */
+.pg.pgp{max-width:none;padding-left:clamp(14px,3vw,40px);padding-right:clamp(14px,3vw,40px)}
+@media(min-width:900px){
+.pgp{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,420px),1fr));gap:12px;align-items:start}
+.pgp>*{margin-top:0!important;margin-bottom:0!important;min-width:0}
+.pgp>h2,.pgp>h3,.pgp>.kp,.pgp>.btn,.pgp>p,.pgp>.nsw,.pgp>.empty,.pgp>.sh{grid-column:1/-1}
+.pgp>h3.h{margin-top:10px!important}
+.pgp>.card,.pgp>details.card,.pgp>form.card{margin:0!important}
+.pgp>.btn{width:auto;justify-self:start}
+.pgp .tb{width:100%}
+}
 /* ===== agentes ===== */
 .chatbox{max-height:300px;overflow-y:auto;display:flex;flex-direction:column;gap:6px;margin-bottom:8px}
 .cb{max-width:88%;padding:8px 11px;border-radius:14px;font-size:14px;line-height:1.4;white-space:pre-wrap}
@@ -380,7 +411,7 @@ return h+'</div>'}
 
 /* ---- noticias y legal ---- */
 const popPage=()=>{const p=popList();if(!p.a.length)return empty('Aún no hay participantes','Cuando los deportistas pulsen «Participo», las pruebas más seguidas aparecerán aquí.');const mx=Math.max(1,...p.a.map(x=>+x.n));return (p.fb?'<p class="m" style="font-size:13px;margin:0 0 10px">Todavía no hay participantes: estas son las pruebas que cierran la inscripción antes.</p>':'<p class="m" style="font-size:13px;margin:0 0 10px">Pruebas en las que más deportistas han pulsado «Participo».</p>')+p.a.map((x,i)=>`<article class="card ev pop pop-i" style="--i:${i}" data-a="ev" data-v="${esc(x.id)}"><span class="rk">${i+1}</span><div style="flex:1;min-width:0"><h3>${esc(x.nm)}</h3><p class="m">${esc(x.sp)} · ${fs_(x.dt)} · ${esc(x.pv)}</p>${p.fb?`<p style="margin-top:6px">${cdTxt(x)}</p>`:`<p style="margin-top:6px"><b>${x.n}</b> ${x.n==1?'participante':'participantes'}</p><span class="bar"><u style="width:${Math.round(+x.n/mx*100)}%"></u></span>`}</div></article>`).join('')};
-function vNews(){return `<div class="pg"><h2 style="margin:0 0 10px">Tablón</h2><div class="nsw" style="margin:0 0 14px">${ntHead().replace('<div class="nsw" role="tablist">','').replace(/<\/div>$/,'')}</div>${nbTab=='pop'?popPage():(S.news.length?[...S.news].sort((a,b)=>b.ts-a.ts).map((n,i)=>`<article class="card nw pop-i" style="--i:${i}"><span class="tag">${esc(n.c)}</span><h3 style="margin:6px 0">${esc(n.t)}</h3><p style="white-space:pre-wrap;margin:0">${esc(n.x)}</p><p class="m" style="font-size:12px">${esc(n.a)} · ${new Date(n.ts).toLocaleDateString('es-ES')}</p></article>`).join(''):empty('Sin noticias todavía','El equipo de Vybra las publicará aquí.'))}${legalFoot()}</div>`}
+function vNews(){return `<div class="pg pgp"><h2 style="margin:0 0 10px">Tablón</h2><div class="nsw" style="margin:0 0 14px">${ntHead().replace('<div class="nsw" role="tablist">','').replace(/<\/div>$/,'')}</div>${nbTab=='pop'?popPage():(S.news.length?[...S.news].sort((a,b)=>b.ts-a.ts).map((n,i)=>`<article class="card nw pop-i" style="--i:${i}"><span class="tag">${esc(n.c)}</span><h3 style="margin:6px 0">${esc(n.t)}</h3><p style="white-space:pre-wrap;margin:0">${esc(n.x)}</p><p class="m" style="font-size:12px">${esc(n.a)} · ${new Date(n.ts).toLocaleDateString('es-ES')}</p></article>`).join(''):empty('Sin noticias todavía','El equipo de Vybra las publicará aquí.'))}${legalFoot()}</div>`}
 function vLegal(){return `<div class="back" data-a="back">← Volver</div><div class="pg"><h2>Privacidad y aviso legal</h2>
 <h3 class="h">Política de privacidad</h3><p><b>Responsable:</b> ${esc(LEG.titular)} (contacto: ${esc(LEG.email)}).</p><p><b>Datos que tratamos:</b> correo electrónico, nombre, las pruebas que añades a tu calendario, tu suscripción y, si lo aceptas, el envío de avisos y promociones.</p><p><b>Para qué:</b> darte tu cuenta y tu calendario deportivo, enviarte los avisos del servicio y, solo si marcas la casilla, promociones. <b>Base legal:</b> tu consentimiento y la ejecución del servicio que pides.</p><p><b>Quién los ve:</b> solo tú y el equipo de Vybra. Usamos proveedores de alojamiento y de autenticación para prestar el servicio. No vendemos tus datos.</p><p><b>Cuánto tiempo:</b> mientras tengas la cuenta. Puedes pedir que se borre.</p><p><b>Tus derechos:</b> acceso, rectificación, supresión, oposición y portabilidad, escribiendo al contacto de arriba o con el formulario de esta página. <b>Almacenamiento local:</b> la web guarda en tu dispositivo el modo claro u oscuro y la sesión; no usa cookies de seguimiento.</p>
 <h3 class="h">Aviso legal</h3><p>Vybra es un servicio en desarrollo. La información de las competiciones procede de calendarios públicos y puede contener errores: confirma siempre fecha, lugar y condiciones en la web oficial de cada prueba. Vybra no organiza las pruebas listadas ni gestiona sus inscripciones.</p>
@@ -393,7 +424,7 @@ const profileHtml=()=>{const un=S.notes.filter(n=>!n.read).length;return `<h2 st
 const ACCL={org:'Organizadores',admin:'Administración',editor:'Redactores'},ACCH={org:'Publica y gestiona las competiciones de tu organización.',admin:'Gestión completa: competiciones, estadísticas, foro, accesos y suscripciones.',editor:'Publica noticias en el tablón. No tiene acceso a las competiciones.'};
 const staffInner=()=>`<div class="skc">${Object.keys(ACCL).map(k=>`<button type="button" class="${accK==k?'on':''}" data-a="acck" data-v="${k}">${ACCL[k]}</button>`).join('')}</div><p class="pbd" style="margin:0 0 6px">${ACCH[accK]}</p><form data-f="staff"><label>Código de ${ACCL[accK].toLowerCase().replace(/es$/,'')}</label><input name="pin" type="password" required autocomplete="off"><button class="btn ghost">Entrar</button></form>`;
 const staffBox=()=>`<details class="card" style="margin-top:18px"><summary class="m">Acceso del equipo</summary><div id="sbx">${staffInner()}</div></details>`;
-function vAcc(){if(role)return vPanel();return '<div class="pg">'+(!user?`<h2 style="margin:0 0 10px">Tu cuenta</h2><p class="m">Crea tu cuenta de deportista para tener tu calendario deportivo y recibir avisos.</p><div id="af">${authForm()}</div>`:profileHtml())+staffBox()+legalFoot()+'</div>'}
+function vAcc(){if(role)return vPanel();return '<div class="pg'+(user?' pgp':'')+'">'+(!user?`<h2 style="margin:0 0 10px">Tu cuenta</h2><p class="m">Crea tu cuenta de deportista para tener tu calendario deportivo y recibir avisos.</p><div id="af">${authForm()}</div>`:profileHtml())+staffBox()+legalFoot()+'</div>'}
 /* ---- suscripción ---- */
 const subLink=()=>{const l=S.set.link;if(!l)return '';try{const u=new URL(l);if(user){u.searchParams.set('prefilled_email',user.email||'');u.searchParams.set('client_reference_id',user.id)}return u.toString()}catch(e){return ''}};
 function vSub(){const st=S.set,pr=(+st.price).toLocaleString('es-ES',{maximumFractionDigits:2}),link=subLink();
@@ -413,7 +444,7 @@ function calWidget(){const sel=calSel?S.cal.filter(c=>c.eid==calSel):(calDay?S.c
 return `<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px"><button class="ib" data-a="calnav" data-v="-1" aria-label="Mes anterior">‹</button><b class="cmt">${calM.toLocaleDateString('es-ES',{month:'long',year:'numeric'})}</b><button class="ib" data-a="calnav" data-v="1" aria-label="Mes siguiente">›</button></div><div class="cgh"><span>L</span><span>M</span><span>X</span><span>J</span><span>V</span><span>S</span><span>D</span></div><div class="cg">${calGrid()}</div>${calDay||calSel?`<p class="m" style="margin:10px 0 6px"><span class="lk" data-a="cday" data-v="">Quitar selección</span> · ${calSel?'Prueba seleccionada':fs_(calDay)}</p>${sel.length?sel.map(calItem).join(''):'<p class="m">No tienes pruebas ese día.</p>'}`:''}`}
 const calAgenda=()=>{const items=[...S.cal].sort((a,b)=>a.dt.localeCompare(b.dt));return '<h3 class="h">Mis próximas pruebas</h3>'+(items.length?items.map(calItem).join(''):empty('Todavía no tienes pruebas','Abre una prueba y pulsa «Participo».'))};
 function vCal(){if(!user)return `<div class="pg"><h2>Mi calendario deportivo</h2>${empty('Entra para ver tu calendario','Crea una cuenta o inicia sesión y añade las pruebas en las que participas.')}<button class="btn" data-a="authgo">Crear cuenta o entrar</button><button class="btn ghost" data-a="subinfo">Ver la suscripción</button></div>`;
-return `<div class="pg"><h2 style="margin:0 0 4px">Mi calendario deportivo</h2><p class="m" style="margin:0 0 10px">Hola, ${esc(S.me?S.me.name:'')}</p>${subOn()?'':'<div class="card"><b>Tu suscripción no está activa</b><p class="m" style="margin:2px 0 0;font-size:13px">Actívala para añadir más pruebas a tu calendario.</p><button class="btn" data-a="subinfo">Ver la suscripción</button></div>'}<div id="cw">${calWidget()}</div><div id="ca">${calAgenda()}</div>${chatHtml()}${feedBox()}${legalFoot()}</div>`}
+return `<div class="pg pgp pgc"><h2 style="margin:0 0 4px">Mi calendario deportivo</h2><p class="m" style="margin:0 0 10px">Hola, ${esc(S.me?S.me.name:'')}</p>${subOn()?'':'<div class="card"><b>Tu suscripción no está activa</b><p class="m" style="margin:2px 0 0;font-size:13px">Actívala para añadir más pruebas a tu calendario.</p><button class="btn" data-a="subinfo">Ver la suscripción</button></div>'}<div class="calw"><div class="calmain card"><div id="cw">${calWidget()}</div></div><aside class="calside"><div id="ca">${calAgenda()}</div>${chatHtml()}${feedBox()}</aside></div>${legalFoot()}</div>`}
 
 /* ---- panel del equipo ---- */
 const todoE=e=>e.fed=='Por confirmar'||e.ofi=='Por confirmar'||e.org=='Por confirmar'||!e.ex;
@@ -432,9 +463,9 @@ function bansHtml(){const l=S.bans||[],b=l.filter(x=>x.banned),w=l.filter(x=>!x.
 function staffList(){const l=S.stf||[];return `<h3 class="h">Accesos del equipo</h3><div class="card"><table class="tb"><tr><th>Acceso</th><th>Nombre</th><th></th></tr>${l.map(x=>`<tr><td>${ACCL[x.role]||x.role}</td><td>${esc(x.name)}</td><td>${x.role=='admin'?'':`<button class="x" data-a="delstaff" data-v="${esc(x.role)}|${esc(x.name)}">Retirar</button>`}</td></tr>`).join('')}</table></div><form class="card" data-f="ned"><label>Nuevo redactor (nombre)</label><input name="name" required><button class="btn">Crear código de redactor</button></form>`}
 const newsForm=(ed)=>`<details class="card"><summary><b>Publicar noticia</b></summary><form data-f="news"><label>Titular</label><input name="t" required><div class="row"><div><label>Sección</label><select name="c">${opt(NC)}</select></div>${ed?`<div><label>Firma</label><input value="${esc(orgName)}" readonly></div>`:`<div><label>Autor</label><input name="a" required></div>`}</div><label>Texto</label><textarea name="x" rows="4" required></textarea><button class="btn">Publicar</button></form></details>`;
 function vPanel(){
-if(role=='editor'){const mine=S.news.filter(n=>n.a==orgName);return `<div class="pg"><h2 style="margin:0 0 10px">Redacción · ${esc(orgName)}</h2><button class="btn ghost" style="margin:0 0 12px" data-a="sout">Cerrar sesión del equipo</button><p class="m" style="margin:0 0 10px">Desde aquí puedes publicar y retirar tus noticias del tablón.</p>`+newsForm(true)+`<h3 class="h">Mis noticias (${mine.length})</h3>`+(mine.length?mine.map(n=>`<p style="display:flex;justify-content:space-between;gap:10px;align-items:center;margin:6px 0"><span>${esc(n.t)}</span><button class="x" data-a="delnews" data-v="${n.id}">Eliminar</button></p>`).join(''):'<p class="m">Aún no has publicado noticias.</p>')+legalFoot()+'</div>'}
+if(role=='editor'){const mine=S.news.filter(n=>n.a==orgName);return `<div class="pg pgp"><h2 style="margin:0 0 10px">Redacción · ${esc(orgName)}</h2><button class="btn ghost" style="margin:0 0 12px" data-a="sout">Cerrar sesión del equipo</button><p class="m" style="margin:0 0 10px">Desde aquí puedes publicar y retirar tus noticias del tablón.</p>`+newsForm(true)+`<h3 class="h">Mis noticias (${mine.length})</h3>`+(mine.length?mine.map(n=>`<p style="display:flex;justify-content:space-between;gap:10px;align-items:center;margin:6px 0"><span>${esc(n.t)}</span><button class="x" data-a="delnews" data-v="${n.id}">Eliminar</button></p>`).join(''):'<p class="m">Aún no has publicado noticias.</p>')+legalFoot()+'</div>'}
 const evs=S.all.filter(canMod).sort((a,b)=>a.dt.localeCompare(b.dt));
-let h=`<div class="pg"><h2 style="margin:0 0 10px">${role=='admin'?'Panel de administración':'Panel de '+esc(orgName)}</h2><button class="btn ghost" style="margin:0 0 12px" data-a="sout">Cerrar sesión del equipo</button>`;
+let h=`<div class="pg pgp"><h2 style="margin:0 0 10px">${role=='admin'?'Panel de administración':'Panel de '+esc(orgName)}</h2><button class="btn ghost" style="margin:0 0 12px" data-a="sout">Cerrar sesión del equipo</button>`;
 if(role=='admin')h+=statsHtml();
 h+=evForm();
 h+=(role=='admin'?`<div class="card"><h3 style="margin:0 0 4px">Imágenes de las pruebas</h3><p class="m" style="font-size:13px;margin:0">Busca en la web oficial de cada prueba su imagen real (cartel o logotipo). Si no la encuentra, la prueba se queda sin imagen.</p><button class="btn ghost" data-a="enrich">Buscar imágenes reales</button></div>`:'')+`<h3 class="h">${role=='admin'?'Todas las competiciones ('+evs.length+')':'Mis competiciones'}</h3>`+(evs.length?evs.map(evTools).join(''):empty('Sin competiciones','Publica la primera con el formulario.'));
