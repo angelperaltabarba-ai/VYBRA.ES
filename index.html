@@ -182,6 +182,11 @@ button:not(:disabled):active,.btn:active{transform:scale(.97);transition:transfo
 .ev{content-visibility:auto;contain-intrinsic-size:auto 104px}
 @media(prefers-reduced-motion:reduce){button:not(:disabled):active,.btn:active,.ev:active{transform:none}}
 
+/* ===== agentes ===== */
+.chatbox{max-height:300px;overflow-y:auto;display:flex;flex-direction:column;gap:6px;margin-bottom:8px}
+.cb{max-width:88%;padding:8px 11px;border-radius:14px;font-size:14px;line-height:1.4;white-space:pre-wrap}
+.cb.me{align-self:flex-end;background:var(--red);color:#fff}.cb.ai{align-self:flex-start;background:rgba(127,127,127,.15)}
+.chatf{display:flex;gap:6px;margin:0 0 6px}.chatf input{flex:1;min-width:0}.chatf .btn{width:auto;margin:0;padding:0 16px}
 /* ===== v10 catálogo ===== */
 .pgw{max-width:none;padding-left:clamp(14px,3vw,40px);padding-right:clamp(14px,3vw,40px)}
 .pgw #lst{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,360px),1fr));gap:12px}
@@ -207,7 +212,7 @@ button:not(:disabled):active,.btn:active{transform:scale(.97);transition:transfo
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <script>
 const MAPBOX_TOKEN='pk.eyJ1IjoiYXA4OCIsImEiOiJjbXZrbTVzNXAwZmFsMnlxdzR1NWNzbjVlIn0.3LFjShcV_WPe7dRMYWGubQ'; /* Token público de Mapbox */
-const SB='https://fgrcdgzqxxmlouicwfow.supabase.co',KEY='sb_publishable_9WUA5u-ajXAr4MyBj3Qtng_oo4CisGm',API=SB+'/functions/v1/api';
+const SB='https://fgrcdgzqxxmlouicwfow.supabase.co',KEY='sb_publishable_9WUA5u-ajXAr4MyBj3Qtng_oo4CisGm',API=SB+'/functions/v1/api',AGENT=SB+'/functions/v1/agent';
 const LEG={titular:'Vybra, proyecto dirigido por Ángel Peralta (director)',email:'angelperaltabarba10@gmail.com'};
 const sbc=window.supabase?window.supabase.createClient(SB,KEY):null;
 const SP={Atletismo:'atl',Ciclismo:'cic',Natación:'nat',Trail:'trl',Marcha:'mar',Triatlón:'tri',BTT:'btt',Otros:'otr'};
@@ -234,6 +239,10 @@ const canMod=e=>role=='admin'||(role=='org'&&e.org==orgName);
 async function tok(){if(!sbc)return null;try{const{data}=await sbc.auth.getSession();return data.session?data.session.access_token:null}catch(e){return null}}
 async function api(path,o){o=o||{};const t=await tok(),h={apikey:KEY};if(t)h.Authorization='Bearer '+t;if(CODE&&o.staff)h['x-staff-code']=CODE;if(o.body)h['Content-Type']='application/json';
 const r=await fetch(API+path,{method:o.method||'GET',headers:h,body:o.body?JSON.stringify(o.body):undefined});const j=await r.json().catch(function(){return{}});if(!r.ok){var e=new Error(j.error||('Error '+r.status));e.status=r.status;throw e}return j}
+async function agent(path,body){const t=await tok();if(!t)throw Error('Inicia sesión para continuar');const r=await fetch(AGENT+path,{method:'POST',headers:{apikey:KEY,Authorization:'Bearer '+t,'Content-Type':'application/json'},body:JSON.stringify(body)});const j=await r.json().catch(function(){return{}});if(!r.ok){var e=new Error(j.error||('Error '+r.status));e.status=r.status;e.code=j.code;e.banned=j.banned;throw e}return j}
+var chatMsgs=[],chatBusy=false;
+const chatBubbles=()=>chatMsgs.length?chatMsgs.map(m=>`<div class="cb ${m.r=='user'?'me':'ai'}">${esc(m.t)}</div>`).join('')+(chatBusy?'<div class="cb ai"><span class="dots">…</span></div>':''):'<p class="m" style="margin:0;font-size:13px">Pregúntame por carreras parecidas a las de tu calendario, por ejemplo «¿qué me recomiendas para el próximo mes?».</p>';
+const chatHtml=()=>!user?'':subOn()?`<h3 class="h">Asistente de carreras</h3><div class="card" id="chatcard"><div id="chatbox" class="chatbox">${chatBubbles()}</div><form data-f="chat" class="chatf"><input name="q" maxlength="500" placeholder="Escribe tu pregunta…" autocomplete="off" required><button class="btn">Enviar</button></form><small class="m">Recomendaciones basadas en las pruebas de tu calendario. Es una IA y puede equivocarse: confirma los datos en la web oficial.</small></div>`:`<h3 class="h">Asistente de carreras</h3><div class="card"><b>Solo para suscriptores</b><p class="m" style="margin:2px 0 0;font-size:13px">Con la suscripción, un asistente te recomienda carreras según las pruebas de tu calendario.</p><button class="btn" data-a="subinfo">Ver la suscripción</button></div>`;
 const rest=async p=>{const r=await fetch(SB+'/rest/v1/'+p,{headers:{apikey:KEY}});if(!r.ok)throw Error('Error '+r.status);return r.json()};
 const rpc=async(f,b)=>{const r=await fetch(SB+'/rest/v1/rpc/'+f,{method:'POST',headers:{apikey:KEY,'Content-Type':'application/json'},body:JSON.stringify(b||{})}),j=await r.json().catch(()=>({}));if(!r.ok)throw Error(j.message||'Error '+r.status);return j};
 const act=(a,p)=>rpc('act',{p_code:CODE,p_action:a,p:p||{}});
@@ -404,7 +413,7 @@ function calWidget(){const sel=calSel?S.cal.filter(c=>c.eid==calSel):(calDay?S.c
 return `<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px"><button class="ib" data-a="calnav" data-v="-1" aria-label="Mes anterior">‹</button><b class="cmt">${calM.toLocaleDateString('es-ES',{month:'long',year:'numeric'})}</b><button class="ib" data-a="calnav" data-v="1" aria-label="Mes siguiente">›</button></div><div class="cgh"><span>L</span><span>M</span><span>X</span><span>J</span><span>V</span><span>S</span><span>D</span></div><div class="cg">${calGrid()}</div>${calDay||calSel?`<p class="m" style="margin:10px 0 6px"><span class="lk" data-a="cday" data-v="">Quitar selección</span> · ${calSel?'Prueba seleccionada':fs_(calDay)}</p>${sel.length?sel.map(calItem).join(''):'<p class="m">No tienes pruebas ese día.</p>'}`:''}`}
 const calAgenda=()=>{const items=[...S.cal].sort((a,b)=>a.dt.localeCompare(b.dt));return '<h3 class="h">Mis próximas pruebas</h3>'+(items.length?items.map(calItem).join(''):empty('Todavía no tienes pruebas','Abre una prueba y pulsa «Participo».'))};
 function vCal(){if(!user)return `<div class="pg"><h2>Mi calendario deportivo</h2>${empty('Entra para ver tu calendario','Crea una cuenta o inicia sesión y añade las pruebas en las que participas.')}<button class="btn" data-a="authgo">Crear cuenta o entrar</button><button class="btn ghost" data-a="subinfo">Ver la suscripción</button></div>`;
-return `<div class="pg"><h2 style="margin:0 0 4px">Mi calendario deportivo</h2><p class="m" style="margin:0 0 10px">Hola, ${esc(S.me?S.me.name:'')}</p>${subOn()?'':'<div class="card"><b>Tu suscripción no está activa</b><p class="m" style="margin:2px 0 0;font-size:13px">Actívala para añadir más pruebas a tu calendario.</p><button class="btn" data-a="subinfo">Ver la suscripción</button></div>'}<div id="cw">${calWidget()}</div><div id="ca">${calAgenda()}</div>${feedBox()}${legalFoot()}</div>`}
+return `<div class="pg"><h2 style="margin:0 0 4px">Mi calendario deportivo</h2><p class="m" style="margin:0 0 10px">Hola, ${esc(S.me?S.me.name:'')}</p>${subOn()?'':'<div class="card"><b>Tu suscripción no está activa</b><p class="m" style="margin:2px 0 0;font-size:13px">Actívala para añadir más pruebas a tu calendario.</p><button class="btn" data-a="subinfo">Ver la suscripción</button></div>'}<div id="cw">${calWidget()}</div><div id="ca">${calAgenda()}</div>${chatHtml()}${feedBox()}${legalFoot()}</div>`}
 
 /* ---- panel del equipo ---- */
 const todoE=e=>e.fed=='Por confirmar'||e.ofi=='Por confirmar'||e.org=='Por confirmar'||!e.ex;
@@ -544,8 +553,11 @@ await api('/events',{method:'POST',staff:true,body:{nm:d.nm.trim(),sp:d.sp,fed:d
 else if(k=='edit'){var p={nm:d.nm,dt:d.dt,hora:d.hora||'',cierre:d.cierre||'',loc:d.loc,dist:d.dist,url:d.url,img:(d.img||'').trim(),fed:d.fed,ofi:d.ofi,ds:d.ds};if(d.org!==undefined)p.org=d.org;if(role=='admin')p.verified=!!d.verified;await api('/events/'+encodeURIComponent(f.dataset.id),{method:'PATCH',staff:true,body:p});await loadEv();await loadStaff();toast('Cambios guardados')}
 else if(k=='live'){await act('live',{eid:f.dataset.id,x:d.x.trim()});await load();toast('Actualización publicada');full=false;updFicha()}
 else if(k=='post'){var e0=S.ev.concat(S.all).find(function(z){return z.id==f.dataset.id});
-if(canMod(e0))await act('post',{eid:e0.id,c:d.c,x:d.x.trim(),re:replyTo||''});else{var pr=await sbc.from('posts').insert({eid:e0.id,c:d.c,x:d.x.trim(),a:'x',re:replyTo||null});if(pr.error)throw Error(pr.error.message)}
+if(canMod(e0))await act('post',{eid:e0.id,c:d.c,x:d.x.trim(),re:replyTo||''});else{await agent('/post',{eid:e0.id,c:d.c,x:d.x.trim(),re:replyTo||null})}
 replyTo=null;await load();toast('Mensaje publicado');full=false;updFicha()}
+else if(k=='chat'){var q=(d.q||'').trim();if(!q||chatBusy)return;var hist=chatMsgs.slice(-6).map(function(m){return{role:m.r,content:m.t}});chatMsgs.push({r:'user',t:q});chatBusy=true;f.reset();var cbx=$('chatbox');if(cbx){cbx.innerHTML=chatBubbles();cbx.scrollTop=cbx.scrollHeight}
+try{var ar=await agent('/chat',{message:q,history:hist});chatMsgs.push({r:'assistant',t:ar.reply})}catch(x2){chatMsgs.push({r:'assistant',t:(x2.message||'No he podido responder')})}
+chatBusy=false;cbx=$('chatbox');if(cbx){cbx.innerHTML=chatBubbles();cbx.scrollTop=cbx.scrollHeight}full=false}
 else if(k=='news'){if(role=='editor')await rpc('editor_add_news',{p_code:CODE,p_c:d.c,p_t:d.t.trim(),p_x:d.x.trim()});else await act('add_news',{c:d.c,t:d.t.trim(),a:d.a.trim(),x:d.x.trim()});await load();toast('Noticia publicada')}
 else if(k=='ned'){var cd=await rpc('admin_add_editor',{p_code:CODE,p_name:d.name.trim()});alert('Código de acceso de redactor ('+d.name.trim()+'): '+cd+'\nGuárdalo y pásaselo: no se vuelve a mostrar.');await loadStaff();f.reset()}
 else if(k=='bcast'){var n=await rpc('admin_broadcast',{p_code:CODE,p_title:d.t.trim(),p_body:d.x.trim(),p_kind:d.k});toast('Enviado a '+n+' deportistas');full=false;f.reset()}
