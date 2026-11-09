@@ -182,6 +182,26 @@ button:not(:disabled):active,.btn:active{transform:scale(.97);transition:transfo
 .ev{content-visibility:auto;contain-intrinsic-size:auto 104px}
 @media(prefers-reduced-motion:reduce){button:not(:disabled):active,.btn:active,.ev:active{transform:none}}
 
+/* calendario a lo grande */
+.calmain{padding:10px 8px}
+@media(min-width:900px){
+.pgp.pgc{display:block}
+.pgc>*{margin-bottom:12px!important}
+.calw{display:grid;grid-template-columns:minmax(0,2.2fr) minmax(320px,1fr);gap:18px;align-items:start}
+.calmain{padding:18px 20px}
+.calmain .cmt{font-family:var(--fh);font-size:26px;display:inline-block}
+.calmain .cmt::first-letter{text-transform:uppercase}
+.calmain .cgh{font-size:13px;font-weight:700;gap:8px;margin:10px 0 8px}
+.calmain .cg{gap:8px}
+.calmain .cgd{aspect-ratio:auto;min-height:clamp(92px,11vh,130px);padding:8px 9px;border-radius:12px;display:flex;flex-direction:column;gap:3px;transition:transform .15s,box-shadow .15s}
+.calmain .cgd:not(.off):hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(0,0,0,.1)}
+.calmain .cgd .dn{font-size:15px;font-weight:700}
+.calmain .cgd.has::after{display:none}
+.calmain .cgd.has{background:color-mix(in srgb,var(--red) 7%,var(--card))}
+.calmain .cgd.sel{background:var(--red)}
+.calside{position:sticky;top:76px;max-height:calc(100vh - 150px);overflow:auto;display:flex;flex-direction:column;gap:12px;padding-right:2px}
+.calside>*{margin:0!important}
+}
 /* ===== ancho completo: calendario, tablón, cuenta y paneles (admin, organización, redacción) ===== */
 .pg.pgp{max-width:none;padding-left:clamp(14px,3vw,40px);padding-right:clamp(14px,3vw,40px)}
 @media(min-width:900px){
@@ -424,7 +444,7 @@ function calWidget(){const sel=calSel?S.cal.filter(c=>c.eid==calSel):(calDay?S.c
 return `<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px"><button class="ib" data-a="calnav" data-v="-1" aria-label="Mes anterior">‹</button><b class="cmt">${calM.toLocaleDateString('es-ES',{month:'long',year:'numeric'})}</b><button class="ib" data-a="calnav" data-v="1" aria-label="Mes siguiente">›</button></div><div class="cgh"><span>L</span><span>M</span><span>X</span><span>J</span><span>V</span><span>S</span><span>D</span></div><div class="cg">${calGrid()}</div>${calDay||calSel?`<p class="m" style="margin:10px 0 6px"><span class="lk" data-a="cday" data-v="">Quitar selección</span> · ${calSel?'Prueba seleccionada':fs_(calDay)}</p>${sel.length?sel.map(calItem).join(''):'<p class="m">No tienes pruebas ese día.</p>'}`:''}`}
 const calAgenda=()=>{const items=[...S.cal].sort((a,b)=>a.dt.localeCompare(b.dt));return '<h3 class="h">Mis próximas pruebas</h3>'+(items.length?items.map(calItem).join(''):empty('Todavía no tienes pruebas','Abre una prueba y pulsa «Participo».'))};
 function vCal(){if(!user)return `<div class="pg"><h2>Mi calendario deportivo</h2>${empty('Entra para ver tu calendario','Crea una cuenta o inicia sesión y añade las pruebas en las que participas.')}<button class="btn" data-a="authgo">Crear cuenta o entrar</button><button class="btn ghost" data-a="subinfo">Ver la suscripción</button></div>`;
-return `<div class="pg pgp pgc"><h2 style="margin:0 0 4px">Mi calendario deportivo</h2><p class="m" style="margin:0 0 10px">Hola, ${esc(S.me?S.me.name:'')}</p>${subOn()?'':'<div class="card"><b>Tu suscripción no está activa</b><p class="m" style="margin:2px 0 0;font-size:13px">Actívala para añadir más pruebas a tu calendario.</p><button class="btn" data-a="subinfo">Ver la suscripción</button></div>'}<div id="cw">${calWidget()}</div><div id="ca">${calAgenda()}</div>${chatHtml()}${feedBox()}${legalFoot()}</div>`}
+return `<div class="pg pgp pgc"><h2 style="margin:0 0 4px">Mi calendario deportivo</h2><p class="m" style="margin:0 0 10px">Hola, ${esc(S.me?S.me.name:'')}</p>${subOn()?'':'<div class="card"><b>Tu suscripción no está activa</b><p class="m" style="margin:2px 0 0;font-size:13px">Actívala para añadir más pruebas a tu calendario.</p><button class="btn" data-a="subinfo">Ver la suscripción</button></div>'}<div class="calw"><div class="calmain card"><div id="cw">${calWidget()}</div></div><aside class="calside"><div id="ca">${calAgenda()}</div>${chatHtml()}${feedBox()}</aside></div>${legalFoot()}</div>`}
 
 /* ---- panel del equipo ---- */
 const todoE=e=>e.fed=='Por confirmar'||e.ofi=='Por confirmar'||e.org=='Por confirmar'||!e.ex;
