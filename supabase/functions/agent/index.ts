@@ -17,7 +17,8 @@ const URL_ = Deno.env.get("SUPABASE_URL")!;
 const admin = createClient(URL_, keyOf("SUPABASE_SECRET_KEYS", "SUPABASE_SERVICE_ROLE_KEY"));
 const ANON = keyOf("SUPABASE_PUBLISHABLE_KEYS", "SUPABASE_ANON_KEY");
 const OR_KEY = Deno.env.get("OPENROUTER_API_KEY") || "";
-const OR_MODEL = Deno.env.get("OPENROUTER_MODEL") || "openai/gpt-4o-mini";
+const OR_MODEL = Deno.env.get("OPENROUTER_MODEL") || "openrouter/free";
+const MOD_AI = Deno.env.get("MOD_AI") === "1"; // la revisión por IA del foro gasta cuota de OpenRouter: solo si se activa
 const DAILY_LIMIT = Number(Deno.env.get("AGENT_DAILY_LIMIT") || 30);
 const today = () => new Date().toLocaleDateString("sv-SE", { timeZone: "Europe/Madrid" });
 
@@ -128,8 +129,8 @@ Deno.serve(async (req) => {
             : "Mensaje bloqueado por lenguaje obsceno. Este es tu primer aviso: a la segunda se te vetará del foro.",
         }, 422);
       }
-      // segunda comprobación con IA (solo bloquea el mensaje; no suma aviso). Si falla, se deja pasar.
-      if (OR_KEY) {
+      // segunda comprobación con IA (solo bloquea el mensaje; no suma aviso). Si falla, se deja pasar. Desactivada por defecto (MOD_AI=1 para activarla).
+      if (OR_KEY && MOD_AI) {
         try {
           const v = await openrouter([{ role: "system", content: SYSTEM_MOD }, { role: "user", content: x }], 5, 0);
           if (/^BLOQUEAR/i.test(v)) return J({ blocked: true, banned: false, error: "Mensaje bloqueado por el moderador: parece ofensivo. Reformúlalo con respeto." }, 422);
