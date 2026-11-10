@@ -33,6 +33,6 @@ jobs:
           username: ${{ secrets.IONOS_SFTP_USER }}
           password: ${{ secrets.IONOS_SFTP_PASSWORD }}
           port: 22
-          source: "index.html,img/*.jpg,img/equipo/*.jpg"
+          source: "index.html,img/*.jpg,img/equipo/*.jpg,img/noticias/*.jpg"
           target: "public"
           overwrite: true
