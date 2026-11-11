@@ -1,4 +1,0 @@
-# Builds automáticos desactivados: el despliegue en Netlify se hace a mano
-# (arrastrando index.html + carpeta img) para no gastar créditos.
-[build]
-  ignore = "exit 0"
