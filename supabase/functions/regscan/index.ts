@@ -45,7 +45,7 @@ function dateAt(s: string, race: string): string | null {
 }
 const KW = `(?:inscripci[oó]n(?:es)?|inscripcions|inscripcio|inscrici[oó]ns|inscriciones|plazo|termini|registration)`;
 const WD = `(?:(?:el|al|a|la|dia|día|del|fins al|fins el|hasta el)\\s+)*(?:(?:lunes|martes|mi[eé]rcoles|jueves|viernes|s[aá]bado|domingo|dilluns|dimarts|dimecres|dijous|divendres|dissabte|diumenge)\\s*,?\\s*)?(?:(?:el|dia|día)\\s+)?`;
-type R = { state?: string; open?: string; openTime?: string; close?: string; closeTxt?: string; openTxt?: string; official?: string; why?: string[] };
+type R = { struct?: boolean; conflict?: boolean; state?: string; open?: string; openTime?: string; close?: string; closeTxt?: string; openTxt?: string; official?: string; why?: string[] };
 function parseText(t: string, race: string, r: R) {
   const why = r.why || (r.why = []);
   // "del 10 de septiembre (de 2026) al 10 de noviembre (de 2026)" cerca de inscripción
@@ -77,6 +77,9 @@ function parseText(t: string, race: string, r: R) {
   if (new RegExp(`(?:${KW}|plazas|dorsales|places|dorsals)[^.]{0,40}?(?:agotad|esgotad|complet[ao]s?\\b|sold out|cubiert)`, 'i').test(t) || /(?:sold out|agotad[ao]s? (?:las )?(?:inscripciones|plazas|dorsales))/i.test(t)) { r.state = r.state || 'agotada'; why.push('agotada'); }
   if (!r.state && new RegExp(`${KW}\\s+(?:cerradas|tancades|cerrada|tancada|closed)`, 'i').test(t)) { r.state = 'cerrada'; why.push('txt-cerrada'); }
   if (!r.state && new RegExp(`${KW}\\s+(?:abiertas|obertes|abierta|oberta|open)\\b`, 'i').test(t)) { r.state = 'abierta'; why.push('txt-abierta'); }
+  // señales contradictorias en el texto (p. ej. «abiertas» y «agotadas» a la vez): no te fíes
+  const sAb = new RegExp(`${KW}\\s+(?:abiertas|obertes|abierta|oberta|open)\\b`, 'i').test(t), sCe = new RegExp(`${KW}\\s+(?:cerradas|tancades|cerrada|tancada|closed)`, 'i').test(t);
+  if (sAb && (sCe || r.state == 'agotada')) { r.conflict = true; why.push('conflicto'); }
 }
 function sportmaniacs(h: string, t: string, race: string, today: string, r: R) {
   const bi = t.search(/Inscripciones\s+\S[^]{0,80}?\d{2}\/\d{2}\/\d{4}/);
@@ -84,6 +87,7 @@ function sportmaniacs(h: string, t: string, race: string, today: string, r: R) {
   const nIns = (h.match(/<span>Inscribirme<\/span>/g) || []).length;
   const open = [...blk.matchAll(new RegExp(`Abren?\\s+el\\s+(\\d{1,2})\\s+(${MRE})\\.?\\s*(?:(\\d{4})\\s*)?-?\\s*(\\d{1,2}:\\d{2})?`, 'gi'))];
   const nCer = (blk.match(/\bCerrada\b/g) || []).length, nNo = (blk.match(/No disponible/g) || []).length, nAg = (blk.match(/Agotad/gi) || []).length;
+  r.struct = nIns > 0 || open.length > 0 || nAg > 0 || nCer > 0 || nNo > 0;
   if (nIns > 0) r.state = 'abierta';
   else if (open.length) {
     r.state = 'abre';
@@ -129,7 +133,7 @@ Deno.serve(async (req) => {
   const { data: ev } = await q;
   const out: any[] = [];
   await Promise.all((ev || []).map(async (e: any) => {
-    const u = e.reg_url || e.url; if (!u || !/^https?:/.test(u)) { out.push({ id: e.id, skip: 'sin web' }); return; }
+    const u = b.useUrl ? (e.url || e.reg_url) : (e.reg_url || e.url); if (!u || !/^https?:/.test(u)) { out.push({ id: e.id, skip: 'sin web' }); return; }
     try {
       const { status, final, r } = await scanOne(u, e.dt, today);
       // si la fuente es un agregador y enlaza a la web oficial, se lee también la oficial
@@ -148,11 +152,21 @@ Deno.serve(async (req) => {
         if (!st && R.open) st = R.open > today ? 'abre' : null;
         if (R.close && R.close < today && st != 'agotada') st = 'cerrada';
         if (st == 'abre' && R.open && R.open <= today) st = 'abierta';
+        // --- Anti-errores: solo se pisan datos cuando la lectura es fiable ---
+        const dateClosed = !!(R.close && R.close < today);           // determinista: la fecha ya pasó
+        const reliable = dateClosed || !!R.struct || !!(off && off.r && off.r.struct);
+        if (R.conflict || (r as any).conflict) st = (dateClosed ? 'cerrada' : undefined) as any;
+        if (R.close && R.open && R.close < R.open) { delete upd.cierre; delete upd.reg_open; delete upd.reg_open_time; }
+        if (R.close && R.close < today && R.close < new Date(Date.now() - 400 * 864e5).toISOString().slice(0, 10)) delete upd.cierre; // fecha absurda
+        // cerrar/agotar solo con confirmación: fecha pasada, plataforma estructurada o 2 lecturas seguidas iguales
+        let prevSt: string | null = null;
+        { const { data: pa } = await sb.from('reg_audit').select('parsed').eq('id', e.id).maybeSingle(); prevSt = pa?.parsed?.upd?.pending || pa?.parsed?.upd?.reg_state || null; }
+        if ((st == 'cerrada' || st == 'agotada') && !reliable && prevSt != st && e.reg_state != st) { upd.pending = st; st = undefined; }
         if (st) upd.reg_state = st;
         if (st == 'cerrada' || st == 'agotada') upd.closed = true; else if (st == 'abierta' || st == 'abre') upd.closed = false;
         upd.checked = today;
       }
-      if (b.apply && status == 200) { const { error } = await sb.from('events').update(upd).eq('id', e.id); if (error) upd.err = error.message; }
+      if (b.apply && status == 200) { const { pending, ...clean_ } = upd; void pending; const { error } = await sb.from('events').update(clean_).eq('id', e.id); if (error) upd.err = error.message; }
       await sb.from('reg_audit').upsert({ id: e.id, url: u, final_url: final, status, parsed: { r, off: off ? { st: off.status, final: off.final, r: off.r } : null, upd }, at: new Date().toISOString() });
       out.push({ id: e.id, status, upd });
     } catch (er) { out.push({ id: e.id, error: String(er).slice(0, 120) }); }
