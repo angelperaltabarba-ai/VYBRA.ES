@@ -642,6 +642,32 @@ button.dd{white-space:nowrap}
 .ab .abt .abr:nth-child(odd){border-left:0}
 .ab .team{grid-template-columns:repeat(6,minmax(0,1fr))}
 }
+
+/* v-opiniones */
+.rvb{margin-top:22px}
+.rvs{color:#E5121B;letter-spacing:2px;font-size:17px}.rvs i{font-style:normal;color:var(--line,#ddd)}
+.rvsum{display:grid;gap:14px;grid-template-columns:1fr;background:var(--card);border-radius:18px;box-shadow:inset 0 0 0 1px var(--line);padding:18px;margin:0 0 14px}
+@media(min-width:700px){.rvsum{grid-template-columns:180px 1fr}}
+.rvavg{display:grid;gap:2px;align-content:start}.rvavg>b{font-size:44px;line-height:1;letter-spacing:-.03em}
+.rvfacts{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}
+.rvfacts>div{display:grid;gap:1px;padding:10px 12px;border-radius:12px;background:var(--bg2,rgba(0,0,0,.03))}
+.rvfacts span{font-size:12px}.rvfacts small{font-size:12px}
+.rvl{display:grid;gap:10px}
+.rvi{background:var(--card);border-radius:16px;box-shadow:inset 0 0 0 1px var(--line);padding:14px 16px}
+.rvh{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.rvh .lkr{margin-left:auto}
+.rvc{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 0}.rvc span{font-size:12.5px;padding:4px 10px;border-radius:99px;background:var(--bg2,rgba(0,0,0,.04))}
+.rvi p{margin:8px 0 0;white-space:pre-wrap}
+.rvf .rvr{display:inline-flex;flex-direction:row-reverse;gap:4px;margin:2px 0 10px}
+.rvf .rvr input{position:absolute;opacity:0;pointer-events:none}
+.rvf .rvr label{font-size:34px;line-height:1;color:var(--line,#ccc);cursor:pointer;margin:0;transition:transform .12s ease-out}
+.rvf .rvr label:active{transform:scale(.92)}
+.rvf .rvr input:checked~label,.rvf .rvr label:hover,.rvf .rvr label:hover~label{color:#E5121B}
+.rvf .rvr input:focus-visible+label{outline:2px solid #E5121B;outline-offset:2px;border-radius:4px}
+.rvg{display:grid;gap:0 12px;grid-template-columns:repeat(auto-fill,minmax(170px,1fr))}
+.rvwait{margin:0 0 12px}
+.card.aloja{margin-top:18px;border:1px dashed var(--line);display:grid;gap:6px;justify-items:start}
+.card.aloja h3{margin:4px 0 0}.card.aloja p{margin:0}
+.card.aloja .pkr{display:flex;gap:10px;width:100%;max-width:520px}.card.aloja .pkr input{flex:1;min-width:0}.card.aloja .pkr .btn{width:auto;flex:none}
 </style></head><body>
 <div class="top"><div><div class="logo" data-a="tab" data-v="inicio" style="cursor:pointer">V<i>y</i>bra</div><small class="slg">Conecta con el deporte</small></div><ul class="tl" id="tl"></ul><div class="tr"><div id="clk"></div><button class="ib" data-a="search" aria-label="Buscar" title="Buscar (/)"><svg class="i" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></button><button class="ib" id="th" data-a="theme" aria-label="Cambiar entre modo claro y oscuro" title="Modo claro / oscuro"></button><button class="dd" data-a="drawer" aria-label="Servicios">Servicios ▾</button><button class="ib hb" data-a="menu" aria-label="Menú" title="Menú"><svg class="i" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button></div></div><div class="mm" id="mm"></div>
 <div id="bn"></div><div class="view" id="view"></div><nav id="nav"></nav><div id="modal"></div><div class="srch" id="srch" role="dialog" aria-label="Buscar"><div class="box"><input id="sq" type="search" placeholder="Busca pruebas, noticias o secciones" autocomplete="off" aria-label="Buscar"><div class="res" id="sres"></div></div></div><div id="toast"></div>
@@ -847,6 +873,33 @@ const evDists=e=>Array.isArray(e.distances)&&e.distances.length>1?e.distances:[]
 function distPick(e){const L=evDists(e);if(!L.length)return '';const ci=S.cal.find(c=>c.eid==e.id),sel=dsel[e.id]||(ci&&ci.dists)||[];const hy=e.sp=='Hybrid Race',w1=hy?'categoría':'distancia',w2=hy?'categorías':'distancias';return `<div class="dpk"><b>¿En qué ${w1} participas?</b><p class="m">Esta prueba tiene ${L.length} ${w2}. Elige una o varias.</p><div class="dch">${L.map(d=>`<button class="chip${sel.includes(d)?' on':''}" data-a="dsel" data-v="${esc(d)}" aria-pressed="${sel.includes(d)}">${sel.includes(d)?ic('check',14)+' ':''}${esc(d)}</button>`).join('')}</div>${ci?`<p class="m" style="font-size:12px;margin:6px 0 0">${sel.length?'Guardado en tu calendario.':'Elige tu distancia para guardarla en tu calendario.'}</p>`:''}</div>`}
 function fichaActions(e){const unv='';const url=/^https?:\/\//.test(e.reg_url||'')?e.reg_url:/^https?:\/\//.test(e.url||'')?e.url:'',part=inCal(e);const hd=url?new URL(url).hostname.replace(/^www\./,''):'',lbl=/haid\.app$/.test(hd)?'Ver la prueba en HAID':'Ir a la web de inscripción';let h=url?`<a class="btn" href="${esc(url)}" target="_blank" rel="noopener">${lbl}</a><p class="m" style="font-size:12px;margin:4px 0 0">${esc(hd)}</p>`:'';
 h+=distPick(e);h+=part?`<div class="card ok" style="margin-top:12px"><b>${ic('check',17)} Participas en esta prueba</b><p class="m" style="margin:2px 0 0;font-size:13px">Ya está en tu calendario deportivo.</p></div>${calBtns(e)}<button class="btn ghost" data-a="tab" data-v="cal">Ver mi calendario</button>`:`<button class="btn alt" data-a="part" data-v="${e.id}">Participo</button><p class="m" style="font-size:13px;margin:6px 0 0">Te inscribes en la web de inscripción de la prueba y, al volver, pulsas «Participo» para añadir la prueba a tu calendario deportivo.</p>`;return unv+h}
+
+/* ---- opiniones de corredores ---- */
+S.rvw={};let rvEdit=false;
+const RVF=[['medicion','Medición',[['exacta','Bien medida'],['corta','Más corta'],['larga','Más larga']]],['avit','Avituallamientos',[['buenos','Buenos'],['justos','Justos'],['malos','Escasos']]],['parking','Aparcamiento',[['facil','Fácil'],['dificil','Difícil']]],['dorsal','Recogida de dorsal',[['agil','Ágil'],['lenta','Lenta']]],['dureza','Dureza',[['suave','Suave'],['media','Media'],['dura','Dura']]]];
+const rvLbl=(k,v)=>{const f=RVF.find(x=>x[0]==k);const o=f&&f[2].find(x=>x[0]==v);return o?o[1]:''};
+const stars=n=>'<span class="rvs" aria-label="'+n+' de 5">'+'★★★★★'.slice(0,n)+'<i>'+'★★★★★'.slice(n)+'</i></span>';
+async function loadRev(eid){if(!sbc){S.rvw[eid]=[];return}try{const r=await sbc.from('race_reviews').select('id,user_id,author,rating,medicion,avit,parking,dorsal,dureza,body,created').eq('event_id',eid).order('created',{ascending:false}).limit(60);S.rvw[eid]=r.data||[]}catch(e){S.rvw[eid]=[]}const b=$('rvb');if(b){const e=curEv();if(e&&e.id==eid)b.outerHTML=revBox(e)}}
+function revSum(L){const avg=L.reduce((a,x)=>a+x.rating,0)/L.length;let h=`<div class="rvsum"><div class="rvavg"><b>${avg.toLocaleString('es-ES',{maximumFractionDigits:1,minimumFractionDigits:1})}</b>${stars(Math.round(avg))}<span class="m">${L.length} ${L.length==1?'opinión':'opiniones'}</span></div><div class="rvfacts">`;
+RVF.forEach(f=>{const c={};L.forEach(x=>{if(x[f[0]])c[x[f[0]]]=(c[x[f[0]]]||0)+1});const k=Object.keys(c).sort((a,b)=>c[b]-c[a])[0];if(!k)return;const tot=Object.values(c).reduce((a,b)=>a+b,0);h+=`<div><span class="m">${f[1]}</span><b>${rvLbl(f[0],k)}</b><small class="m">${c[k]} de ${tot}</small></div>`});
+return h+'</div></div>'}
+function revForm(e,mine){const m=mine||{};return `<form class="card rvf" data-f="rev" data-id="${esc(e.id)}"><h3 style="margin:0 0 4px">${mine?'Edita tu opinión':'¿Corriste esta prueba?'}</h3><p class="m" style="margin:0 0 10px;font-size:13.5px">Cuenta cómo fue para quien la corra el año que viene.</p><label>Valoración general</label><div class="rvr">${[5,4,3,2,1].map(n=>`<input type="radio" name="rating" id="rv${n}" value="${n}"${m.rating==n?' checked':''} required><label for="rv${n}" title="${n} de 5">★</label>`).join('')}</div><div class="rvg">${RVF.map(f=>`<div><label>${f[1]}</label><select name="${f[0]}"><option value="">Sin opinión</option>${f[2].map(o=>`<option value="${o[0]}"${m[f[0]]==o[0]?' selected':''}>${o[1]}</option>`).join('')}</select></div>`).join('')}</div><label>Tu comentario (opcional)</label><textarea name="body" maxlength="800" rows="3" placeholder="Recorrido, ambiente, organización, consejos…">${esc(m.body||'')}</textarea><div class="row"><button class="btn">${mine?'Guardar cambios':'Publicar opinión'}</button>${mine?`<button type="button" class="btn ghost" data-a="rvdel" data-v="${esc(m.id)}">Borrar mi opinión</button>`:''}</div></form>`}
+function revBox(e){const L=S.rvw[e.id];if(L===undefined){setTimeout(()=>loadRev(e.id),0);return '<div id="rvb" class="rvb"><h3 class="h">Opiniones de corredores</h3><p class="m">Cargando…</p></div>'}
+const past=e.dt&&e.dt<=today(),mine=user&&L.find(x=>x.user_id==user.id);let h='<div id="rvb" class="rvb"><h3 class="h">Opiniones de corredores</h3>';
+if(L.length)h+=revSum(L);
+if(!past)h+=`<div class="card rvwait"><b>Las opiniones se abren cuando se celebre la prueba</b><p class="m" style="margin:2px 0 0;font-size:13.5px">A partir del ${fs_(e.dt)} los que la corran podrán contar cómo fue: medición, avituallamientos, aparcamiento y más.</p></div>`;
+else if(!user)h+=`<div class="card rvwait"><b>¿Corriste esta prueba?</b><p class="m" style="margin:2px 0 8px;font-size:13.5px">Entra con tu cuenta gratuita para contar cómo fue.</p><button class="btn ghost" data-a="rvlogin" style="width:auto">Entrar para opinar</button></div>`;
+else if(!mine||rvEdit)h+=revForm(e,mine);
+if(L.length)h+='<div class="rvl">'+L.map(x=>`<article class="rvi"><div class="rvh">${stars(x.rating)}<b>${esc(x.author||'Deportista')}</b><small class="m">${fs_(String(x.created).slice(0,10))}</small>${user&&x.user_id==user.id&&!rvEdit?`<button class="lkr" data-a="rvedit">Editar</button>`:''}</div>${RVF.filter(f=>x[f[0]]).length?`<div class="rvc">${RVF.filter(f=>x[f[0]]).map(f=>`<span>${f[1]}: <b>${rvLbl(f[0],x[f[0]])}</b></span>`).join('')}</div>`:''}${x.body?`<p>${esc(x.body)}</p>`:''}</article>`).join('')+'</div>';
+else if(past)h+='<p class="m" style="font-size:13.5px">Todavía nadie ha opinado sobre esta prueba.</p>';
+return h+'</div>'}
+/* ---- puerta falsa: alojamiento ---- */
+let alSt={};
+function alojaBox(e){if(!e.dt||e.dt<today())return '';const st=alSt[e.id]||0;let h=`<div class="card aloja"><span class="tag">Próximamente</span><h3>Dónde dormir cerca de la salida</h3><p class="m">Hoteles y apartamentos a poca distancia de la salida de ${esc(e.nm)}, con disponibilidad para la noche antes de la prueba.</p>`;
+if(st==0)h+=`<button class="btn" data-a="aloja" data-v="${esc(e.id)}" style="width:auto">Me interesa</button>`;
+else if(st==1)h+=`<form data-f="alojain" data-id="${esc(e.id)}" class="pkr"><input name="em" type="email" required placeholder="Tu correo" value="${esc(user&&user.email||'')}"><button class="btn sm">Avisadme</button></form><p class="m" style="font-size:12px;margin:6px 0 0">Te escribimos solo cuando esté disponible.</p>`;
+else h+=`<p style="margin:0"><b>${ic('check',16)} Apuntado.</b> Te avisaremos cuando esté listo.</p>`;
+return h+'</div>'}
 const fichaForum=e=>liveBox(e)+forumHtml(e);
 const curEv=()=>page&&page.k=='ev'?S.ev.concat(S.all).find(x=>x.id==page.id):null;
 function vEvPage(){const e=curEv();if(!e){page=null;return vEv()}
@@ -858,6 +911,7 @@ h+=regInfo(e)+`<div id="fa">${fichaActions(e)}</div>`+podFicha(e);
 h+=`<a class="btn ghost" href="${esc(gmu(e))}" target="_blank" rel="noopener">${ic('pin',18)} Cómo llegar (Google Maps)</a><span class="m" style="font-size:12px">${e.ex?'Ubicación exacta confirmada':'Ubicación aproximada (localidad)'}</span>`;
 if(e.ds)h+=`<p class="m" style="white-space:pre-wrap">${esc(e.ds)}</p>`;
 h+=fichaSum(e);
+h+=alojaBox(e)+revBox(e);
 h+=shareHtml(e)+`<div id="ff">${fichaForum(e)}</div>`+relHtml(e);
 if(e.checked)h+=`<p class="m" style="font-size:12px;margin-top:16px">Datos comprobados el ${fs_(e.checked)}</p>`;
 return h+'</div>'}
@@ -1467,6 +1521,10 @@ if(a=='delpost'){if(!confirm('¿Eliminar el mensaje?'))return;await act('del_pos
 if(a=='deleve'){if(!confirm('¿Eliminar esta competición?'))return;await api('/events/'+encodeURIComponent(v),{method:'DELETE',staff:true});await loadEv();await loadStaff();toast('Competición eliminada');render();return}
 if(a=='delnews'){if(!confirm('¿Eliminar la noticia?'))return;if(role=='editor')await rpc('editor_del_news',{p_code:CODE,p_id:v});else await act('del_news',{id:v});await load();render();return}
 if(a=='clubin'){tab='acc';page=null;accK='club';render();setTimeout(function(){var d=document.querySelector('details.card');if(d)d.open=true;var sb=$('sbx');if(sb)sb.innerHTML=staffInner()},60);return}
+if(a=='rvlogin'){page={k:'auth'};render();return}
+if(a=='rvedit'){rvEdit=true;const e=curEv();const b=$('rvb');if(b&&e)b.outerHTML=revBox(e);return}
+if(a=='rvdel'){const e=curEv();try{const r=await sbc.from('race_reviews').delete().eq('id',v);if(r.error)throw Error(r.error.message);rvEdit=false;if(e){delete S.rvw[e.id];await loadRev(e.id)}toast('Opinión borrada')}catch(er){toast('No se ha podido borrar')}return}
+if(a=='aloja'){alSt[v]=1;try{rpc('fd_click',{p_sport:'aloja'})}catch(er){}const e=curEv();const b=document.querySelector('.card.aloja');if(b&&e)b.outerHTML=alojaBox(e);return}
 if(a=='cpdel'){try{await rpc('club_event_set',{p_code:CODE,p_event:v,p_on:false});await loadClubPanel();toast('Prueba quitada');render()}catch(e){toast('No se ha podido quitar')}return}
 if(a=='sout'){role='';orgName='';CODE='';S.all=[];S.svcs=[];S.st=null;S.fm=[];S.stf=[];try{sessionStorage.removeItem('vy')}catch(e){}lastKey='';render();return}
 if(a=='retry'){loadErr=false;banner();await load();render();return}
@@ -1510,6 +1568,8 @@ else if(k=='imp'){var rows=d.csv.split(/\r?\n/).map(function(l){return l.trim()}
 var R=rows.map(function(c){return{nm:c[0],sp:SP[c[1]]?c[1]:'Otros',pv:c[2],loc:c[3],dt:c[4],hora:c[5],cierre:c[6],dist:c[7],fed:c[8],ofi:c[9],url:c[10],lat:parseFloat((c[11]||'').replace(',','.')),lon:parseFloat((c[12]||'').replace(',','.')),org:c[13]}}).filter(function(x){return x.nm&&x.dt&&PV[x.pv]&&isFinite(x.lat)&&isFinite(x.lon)});
 if(!R.length)throw Error('No se pudo leer ninguna fila válida (revisa provincia, fecha y coordenadas)');var ri=await api('/events/bulk',{method:'POST',staff:true,body:{rows:R}});await loadEv();await loadStaff();toast(ri.added+' añadidas (sin verificar: no se publican hasta que las verifiques) · '+ri.skipped+' ya existían · '+ri.invalid+' no válidas')}
 else if(k=='svc'){var sv=SERV.find(function(z){return z.id==f.dataset.s});await rpc('request_service',{p_s:sv.n,p_c:d.c,p_em:d.em.trim()});toast('Solicitud enviada: te contactaremos');full=false;f.reset()}
+else if(k=='rev'){if(!user||!sbc){page={k:'auth'};render();return}const eid=f.dataset.id;const row={event_id:eid,user_id:user.id,rating:+d.rating,body:(d.body||'').trim()||null};RVF.forEach(x=>row[x[0]]=d[x[0]]||null);const r=await sbc.from('race_reviews').upsert(row,{onConflict:'event_id,user_id'});if(r.error)throw Error(r.error.message);rvEdit=false;delete S.rvw[eid];await loadRev(eid);toast('Gracias por tu opinión')}
+else if(k=='alojain'){const eid=f.dataset.id;await rpc('fd_signup',{p_sport:'aloja',p_email:d.em.trim(),p_src:('ficha:'+eid).slice(0,60),p_formats:null});alSt[eid]=2;const e=curEv();const b=document.querySelector('.card.aloja');if(b&&e)b.outerHTML=alojaBox(e);toast('Te avisaremos')}
 else if(k=='fdin'){var fk=f.dataset.k;var rr=await rpc('fd_signup',{p_sport:fk,p_email:d.em.trim(),p_src:'web',p_formats:fdFm[fk]&&fdFm[fk].length?fdFm[fk]:null});fdOk[fk]=true;fdN[fk]=rr&&rr.n||0;full=false;toast('Te avisaremos');render();var okc=document.querySelector('#fdf .card.ok');if(okc){okc.scrollIntoView({block:'center',behavior:RM()?'auto':'smooth'});var cu=okc.querySelector('.cu');if(cu)countUp(cu)}}
 else if(k=='prev'){var src='';try{src=new URLSearchParams(location.search).get('src')||''}catch(e){}await rpc('preventa_reservar',{p_email:d.em.trim(),p_nombre:d.nm.trim(),p_deporte:d.sp||null,p_src:src||null});preOk=true;PRE=(PRE||0)+1;full=false;toast('Plaza reservada');render()}
 else if(k=='fgot'){if(!sbc)throw Error('La conexión con las cuentas no está disponible');var rf=await sbc.auth.resetPasswordForEmail(d.em.trim(),{redirectTo:location.origin});if(rf.error)throw rf.error;toast('Si el correo existe, recibirás un enlace');page=null;full=true}
