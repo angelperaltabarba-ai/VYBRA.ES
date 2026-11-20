@@ -668,6 +668,39 @@ button.dd{white-space:nowrap}
 .card.aloja{margin-top:18px;border:1px dashed var(--line);display:grid;gap:6px;justify-items:start}
 .card.aloja h3{margin:4px 0 0}.card.aloja p{margin:0}
 .card.aloja .pkr{display:flex;gap:10px;width:100%;max-width:520px}.card.aloja .pkr input{flex:1;min-width:0}.card.aloja .pkr .btn{width:auto;flex:none}
+
+/* ===== v-depth: profundidad y movimiento (solo transform/opacity, sin librerías) ===== */
+:root{--eo:cubic-bezier(.23,1,.32,1);--e1:0 1px 2px rgba(0,0,0,.28),0 4px 14px -6px rgba(0,0,0,.45);--e2:0 2px 4px rgba(0,0,0,.3),0 18px 40px -16px rgba(0,0,0,.6);--e3:0 4px 8px rgba(0,0,0,.3),0 30px 70px -24px rgba(0,0,0,.7);--rg:0 10px 26px -10px rgba(229,18,27,.6)}
+:root[data-theme=light]{--e1:0 1px 2px rgba(22,16,16,.05),0 6px 18px -8px rgba(22,16,16,.12);--e2:0 2px 6px rgba(22,16,16,.06),0 22px 44px -18px rgba(22,16,16,.22);--e3:0 4px 10px rgba(22,16,16,.07),0 34px 70px -26px rgba(22,16,16,.30);--rg:0 10px 24px -10px rgba(229,18,27,.55)}
+/* superficies con elevación */
+.card,.plc,.rvi,.clbs,.rvsum,.nwc,.cgd,.abt,.how>div,.team>div,.st{box-shadow:var(--e1)}
+.card,.plc,.nwc,.rvi{border-color:color-mix(in srgb,var(--line) 70%,transparent)}
+/* botón principal con relieve */
+.btn:not(.ghost):not(.alt){box-shadow:var(--rg),inset 0 1px 0 rgba(255,255,255,.18)}
+/* cabecera: sombra al hacer scroll */
+.top{transition:box-shadow .3s var(--eo)}
+body.scl .top{box-shadow:0 1px 0 var(--ring,var(--line)),0 10px 30px -18px rgba(0,0,0,.35)}
+@media (hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference){
+ .btn{transition:transform .16s var(--eo),box-shadow .2s var(--eo),background-color .2s}
+ .btn:not(.ghost):not(.alt):hover{transform:translateY(-1px);box-shadow:0 14px 30px -12px rgba(229,18,27,.7),inset 0 1px 0 rgba(255,255,255,.2)}
+ .card.ev,.nwc,.cgd:not(.off),.how>div,.team>div,.clbs,.clc{transition:transform .28s var(--eo),box-shadow .28s var(--eo)}
+ .card.ev:hover,.nwc:hover,.how>div:hover,.team>div:hover,.clc:hover{transform:translateY(-3px);box-shadow:var(--e2)}
+ .plc{transition:transform .35s var(--eo),box-shadow .35s var(--eo);transform-style:preserve-3d}
+ .plc.tlt{transition:transform .08s linear,box-shadow .35s var(--eo);box-shadow:var(--e3)}
+ .plc::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;opacity:0;transition:opacity .3s var(--eo);background:radial-gradient(420px circle at var(--mx,50%) var(--my,0%),rgba(255,255,255,.16),transparent 45%)}
+ .plc.tlt::after{opacity:1}
+ .plc>*{transform:translateZ(18px)}
+}
+/* plan destacado con más profundidad */
+.plc.star{box-shadow:var(--e2),0 0 0 1px rgba(229,18,27,.35)}
+/* entrada al hacer scroll, sin JavaScript (solo navegadores que lo soportan) */
+@supports (animation-timeline:view()){
+ @media (prefers-reduced-motion:no-preference){
+  .card.ev,.nwc,.rvi,.plc,.abt,.team>div,.how>div,.rvfacts>div,.clbs,.cgd,.accg .card,.st,.rvsum{animation:dIn linear both;animation-timeline:view();animation-range:entry 0% entry 40%}
+ }
+}
+@keyframes dIn{from{opacity:0;transform:translateY(28px) scale(.97)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.plc,.plc>*{transform:none!important}.plc::after{display:none}}
 </style></head><body>
 <div class="top"><div><div class="logo" data-a="tab" data-v="inicio" style="cursor:pointer">V<i>y</i>bra</div><small class="slg">Conecta con el deporte</small></div><ul class="tl" id="tl"></ul><div class="tr"><div id="clk"></div><button class="ib" data-a="search" aria-label="Buscar" title="Buscar (/)"><svg class="i" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></button><button class="ib" id="th" data-a="theme" aria-label="Cambiar entre modo claro y oscuro" title="Modo claro / oscuro"></button><button class="dd" data-a="drawer" aria-label="Servicios">Servicios ▾</button><button class="ib hb" data-a="menu" aria-label="Menú" title="Menú"><svg class="i" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button></div></div><div class="mm" id="mm"></div>
 <div id="bn"></div><div class="view" id="view"></div><nav id="nav"></nav><div id="modal"></div><div class="srch" id="srch" role="dialog" aria-label="Buscar"><div class="box"><input id="sq" type="search" placeholder="Busca pruebas, noticias o secciones" autocomplete="off" aria-label="Buscar"><div class="res" id="sres"></div></div></div><div id="toast"></div>
@@ -1594,4 +1627,13 @@ if(qs.get('suscripcion')=='ok'){page={k:'sub'};tab='acc';try{history.replaceStat
 ckBar();render();
 var sig=function(){return S.ev.length+':'+S.news.length+':'+S.live.length+':'+S.posts.length};
 setInterval(async function(){if(document.hidden||/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName))return;var s0=sig(),h0=loaded;await load();if(s0!==sig()||h0!==loaded)refreshData()},30000)})();
+
+/* ---- profundidad: inclinación 3D de planes y cabecera al hacer scroll ---- */
+(function(){var vw=document.getElementById('view');if(vw){var sc=false,rq=0;vw.addEventListener('scroll',function(){if(rq)return;rq=requestAnimationFrame(function(){rq=0;var on=vw.scrollTop>8;if(on!==sc){sc=on;document.body.classList.toggle('scl',on)}})},{passive:true})}
+ if(!window.matchMedia||!matchMedia('(hover:hover) and (pointer:fine)').matches||matchMedia('(prefers-reduced-motion:reduce)').matches)return;
+ var el=null,raf=0,px=0,py=0;
+ function reset(){if(el){el.classList.remove('tlt');el.style.transform='';el=null}}
+ document.addEventListener('pointermove',function(e){var t=e.target&&e.target.closest?e.target.closest('.plc'):null;if(t!==el){reset();el=t;if(el)el.classList.add('tlt')}if(!el)return;var r=el.getBoundingClientRect();px=(e.clientX-r.left)/r.width;py=(e.clientY-r.top)/r.height;if(!raf)raf=requestAnimationFrame(function(){raf=0;if(!el)return;el.style.transform='perspective(1000px) rotateX('+((.5-py)*6).toFixed(2)+'deg) rotateY('+((px-.5)*7).toFixed(2)+'deg) translateY(-4px)';el.style.setProperty('--mx',(px*100).toFixed(1)+'%');el.style.setProperty('--my',(py*100).toFixed(1)+'%')})},{passive:true});
+ document.addEventListener('pointerleave',reset);window.addEventListener('blur',reset);
+})();
 </script></body></html>
