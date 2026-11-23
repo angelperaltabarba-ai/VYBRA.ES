@@ -830,7 +830,8 @@ input[type=checkbox]{width:18px;height:18px;min-width:0;flex:none;padding:0;marg
 @media (prefers-reduced-motion:reduce){.snc-l>*,.snc-r>*{opacity:1;transform:none}.snc::before,.snc-go::before,.lks .snc-go,.tl button.pz[data-a=sncgo],#mm button.pz[data-a=sncgo],.snc-pill{animation:none}}
 
 /* v-vw: la palabra Vybra aparece entera de una vez (sin letras a destiempo) */
-.vw .l,.vw .y,.vw .dt{animation:none!important;opacity:1!important;transform:none!important;filter:none!important}
+.vw .l,.vw .y,.vw .dt{animation:none!important;opacity:1!important;transform:none;filter:none!important}
+.vw .y{transform-origin:50% 72%;will-change:transform}.vw .dt{transform-origin:50% 80%}
 .vw>span{display:inline-block;opacity:0;transform:translateY(.12em)}
 .fok .vw>span{animation:vwIn .8s cubic-bezier(.23,1,.32,1) .05s forwards}
 @keyframes vwIn{to{opacity:1;transform:none}}
@@ -1819,6 +1820,8 @@ setInterval(async function(){if(document.hidden||/INPUT|TEXTAREA|SELECT/.test(do
 (function(){var d=function(){document.body.classList.add('fok')};try{if(document.fonts&&document.fonts.ready){document.fonts.ready.then(d);setTimeout(d,1500)}else d()}catch(e){d()}})();
 
 /* latido de la portada: punto que recorre la línea como un monitor */
-var vwDA=0;function vwDot(pp){var d=$('vwpd');if(!d||!pp.getTotalLength)return;cancelAnimationFrame(vwDA);if(RM()){d.style.display='none';return}var L=pp.getTotalLength(),T=2600,t0=performance.now()+2400;
- (function f(t){var dd=$('vwpd');if(!dd||!document.body.contains(dd))return;if(t>=t0){var k=((t-t0)%T)/T,p=pp.getPointAtLength(k*L);dd.setAttribute('cx',p.x.toFixed(1));dd.setAttribute('cy',p.y.toFixed(1));dd.style.opacity=k<.04?k/.04:k>.96?(1-k)/.04:1}vwDA=requestAnimationFrame(f)})(performance.now())}
+var vwDA=0;function vwDot(pp){var d=$('vwpd');if(!d||!pp.getTotalLength)return;cancelAnimationFrame(vwDA);if(RM()){d.style.display='none';return}var L=pp.getTotalLength(),T=2600,t0=performance.now()+2400,h=$('vw'),yy=h&&h.querySelector('.y'),dt=h&&h.querySelector('.dt'),sv=$('vwp');
+ var Y=yy?yy.getBoundingClientRect():null,S=sv.getBoundingClientRect(),cx=Y?(Y.left+Y.width/2-S.left):L/2,lo=0,hi=L;for(var i=0;i<18;i++){var mid=(lo+hi)/2;if(pp.getPointAtLength(mid).x<cx-6)lo=mid;else hi=mid}var sk=hi/L,pk=-1;
+ var beat=function(el,a){if(el&&el.animate)el.animate([{transform:'none'},{transform:'scale('+a+')'},{transform:'none'},{transform:'scale('+(1+(a-1)*.5)+')'},{transform:'none'}],{duration:620,easing:'cubic-bezier(.23,1,.32,1)'})};
+ (function f(t){var dd=$('vwpd');if(!dd||!document.body.contains(dd))return;if(t>=t0){var k=((t-t0)%T)/T,p=pp.getPointAtLength(k*L);if(pk>=0&&pk<sk&&k>=sk)beat(yy,1.13);if(pk>k)beat(dt,1.35);pk=k;dd.setAttribute('cx',p.x.toFixed(1));dd.setAttribute('cy',p.y.toFixed(1));dd.style.opacity=k<.04?k/.04:k>.96?(1-k)/.04:1}vwDA=requestAnimationFrame(f)})(performance.now())}
 </script></body></html>
