@@ -135,7 +135,10 @@ Deno.serve(async (req) => {
           ({ data: ev } = await admin.from("events").select("id,nm,dt,pv,loc,lat,lon,ex").eq("id", hit.eid).maybeSingle());
         }
         if (!ev || typeof ev.lat !== "number") return J({ reply: "Dime de qué prueba hablas: abre su ficha y pregúntame desde ahí, o añádela a tu calendario." });
-        const places = await nearby(ev.lat, ev.lon, message);
+        // sitios que manda la web (buscados en OpenStreetMap desde el navegador); si no llegan, se buscan aquí
+        const num = (v: unknown) => typeof v === "number" && isFinite(v);
+        const given = (Array.isArray(body.places) ? body.places : []).slice(0, 25).filter((p: any) => p && typeof p.nm === "string" && num(p.lat) && num(p.lon)).map((p: any) => ({ nm: brief(p.nm, 80), t: brief(p.t, 30), k: ["comer", "dormir", "plan"].includes(p.k) ? p.k : "plan", lat: p.lat, lon: p.lon, d: num(p.d) ? Math.round(p.d * 10) / 10 : Math.round(km(ev!.lat, ev!.lon, p.lat, p.lon) * 10) / 10, cocina: brief(p.cocina, 40), web: /^https:\/\//.test(String(p.web || "")) ? brief(p.web, 200) : "", dir: brief(p.dir, 80) }));
+        const places = given.length ? given : await nearby(ev.lat, ev.lon, message);
         const ctxp = `PRUEBA: ${brief(ev.nm, 80)} · ${ev.dt} · ${brief(ev.loc, 40)}, ${brief(ev.pv, 30)}${ev.ex ? "" : " (ubicación aproximada: centro de la localidad)"}\n\nSITIOS REALES CERCANOS (OpenStreetMap):\n${places.map((p) => `- ${p.nm} · ${p.t}${p.cocina ? " (" + p.cocina + ")" : ""} · a ${p.d} km${p.dir ? " · " + p.dir : ""}`).join("\n") || "(ninguno)"}`;
         const histp = (Array.isArray(body.history) ? body.history : []).slice(-4).map((h: { role?: string; content?: string }) => ({ role: h.role === "assistant" ? "assistant" : "user", content: brief(h.content, 400) })).filter((h: { content: string }) => h.content);
         let rp = "";
