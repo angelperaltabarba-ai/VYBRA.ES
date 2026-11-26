@@ -473,7 +473,8 @@ function count(el,to,dur){const suf=el.dataset.suf||'';const t0=performance.now(
 const web=$('#web');let W=null,ready=false;
 try{localStorage.setItem('vck',localStorage.getItem('vck')||'ess')}catch(e){}
 web.src='/?gala='+Date.now();
-web.addEventListener('load',async()=>{W=web.contentWindow;for(let i=0;i<60&&!(W.S&&W.S.ev&&W.S.ev.length);i++)await sleep(250);
+web.addEventListener('load',async()=>{W=web.contentWindow;
+  try{['S','page','tab','role','CODE','orgName','MAP','alojOn','alMk','alCache','atPins','atEv','sport','cpT','cpA','cpLv','cpM','atPl','user'].forEach(n=>{let ok=false;try{W.eval('typeof '+n);ok=W.eval('typeof '+n)!=='undefined'}catch(e){}if(!ok)return;try{Object.defineProperty(W,n,{configurable:true,get(){return W.eval(n)},set(v){W.__gv=v;W.eval(n+'=window.__gv')}})}catch(e){}})}catch(e){console.warn(e)}for(let i=0;i<60&&!(W.S&&W.S.ev&&W.S.ev.length);i++)await sleep(250);
   try{W.document.documentElement.dataset.theme='dark';W.document.body.classList.add('fok')}catch(e){}
   ready=!!(W.S&&W.S.ev&&W.S.ev.length>50);if(ready){fillLive();if(cur>=0)runScene(cur,true)}else if(cur>=0)useRec(SC[cur].id)});
 function fillLive(){try{const ev=W.S.ev.filter(e=>e.dt>=W.today());const up=ev.length,pv=new Set(ev.filter(e=>e.country=='ES').map(e=>e.pv)).size,open=ev.filter(e=>W.regSt?/abiert/i.test(String((W.regSt(e)||{}).t||e.reg_state||'')):e.reg_state=='abierta').length;
