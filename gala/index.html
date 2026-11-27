@@ -118,6 +118,8 @@ body.nocur,body.nocur *{cursor:none!important}
 /* chat de Atlas */
 #atlas{position:fixed;z-index:25;right:4vw;bottom:9vh;width:min(36vw,620px);display:grid;gap:1.2vh;opacity:0;transform:translateY(30px);transition:opacity .7s var(--e),transform .9s var(--e);pointer-events:none}
 #atlas.v{opacity:1;transform:none}
+#s-sleep .feat,#s-sleep .badge{transition:opacity .6s}
+#s-sleep.atl .feat,#s-sleep.atl .badge{opacity:0}
 .bub{max-width:92%;padding:1em 1.2em;border-radius:20px;font:500 clamp(14px,1.1vw,20px)/1.4 var(--fh);box-shadow:0 20px 50px rgba(0,0,0,.5)}
 .bub.me{justify-self:end;background:#fff;color:#0b0b0d;border-bottom-right-radius:6px}
 .bub.ai{background:rgba(24,24,28,.92);border:1px solid var(--line);border-bottom-left-radius:6px;backdrop-filter:blur(16px)}
@@ -316,13 +318,6 @@ body.nocur,body.nocur *{cursor:none!important}
 </section>
 
 <!-- 5..12 · la web en directo -->
-<section class="sc demo" id="s-home" data-chap="La web">
-  <p class="kick">Esto no es una maqueta</p>
-  <h2 class="h2">Es <span class="y">vybra.eu</span>, ahora mismo.</h2>
-  <ul class="feat"><li>Web propia con dominio europeo</li><li>Funciona en móvil y en ordenador</li><li>Modo claro y oscuro</li><li>Pagos reales con Stripe</li></ul>
-  <span class="badge live"><i></i>En directo desde la web</span>
-</section>
-
 <section class="sc demo" id="s-map" data-chap="La web">
   <p class="kick">Para el deportista</p>
   <h2 class="h2">Todas las pruebas, <span class="y">en el mapa</span>.</h2>
@@ -346,21 +341,29 @@ body.nocur,body.nocur *{cursor:none!important}
 
 <section class="sc demo" id="s-sleep" data-chap="La web">
   <p class="kick">Viaja a competir</p>
-  <h2 class="h2">Dónde dormir, en <span style="color:#3b82f6">azul</span>.</h2>
-  <ul class="feat"><li>Hoteles, hostales y apartamentos alrededor de la prueba</li><li>Con su web o la búsqueda para la noche de antes</li><li>Datos abiertos de OpenStreetMap</li></ul>
+  <h2 class="h2">Dónde dormir, en <span style="color:#3b82f6">azul</span>. Dónde comer, <span class="y">a Atlas</span>.</h2>
+  <ul class="feat"><li>Hoteles, hostales, apartamentos y alquileres alrededor de la salida</li><li>Con su web o la búsqueda para la noche de antes</li><li>Vybra Atlas responde con sitios reales y los pinta en el mapa</li></ul>
   <span class="badge live"><i></i><span id="ksleep">Sevilla, en directo</span></span>
 </section>
 
-<section class="sc demo" id="s-atlas" data-chap="La web">
-  <p class="kick">Vybra Atlas</p>
-  <h2 class="h2">«¿Dónde se puede comer <span class="y">cerca</span>?»</h2>
-  <ul class="feat"><li>Nuestro asistente para suscriptores</li><li>Recomienda pruebas según tu calendario</li><li>Y sitios reales cerca de la salida: comer, dormir, planes</li></ul>
+<section class="sc demo" id="s-radar" data-chap="La web">
+  <p class="kick">Vybra Radar + Calendario</p>
+  <h2 class="h2">Que no se te escape <span class="y">ninguna plaza</span>.</h2>
+  <ul class="feat"><li>«Participo» y la prueba entra en tu calendario deportivo</li><li>Tu temporada: hechas, próximas y la siguiente cuenta atrás</li><li id="krd">Radar: qué inscripciones abren, cuáles cierran y cuáles se agotan</li></ul>
+  <span class="badge demo"><i></i>Calendario de ejemplo con pruebas reales</span>
+</section>
+
+<section class="sc demo" id="s-podio" data-chap="La web">
+  <p class="kick">Vybra Podio</p>
+  <h2 class="h2">Tu temporada, <span class="y">resuelta</span>.</h2>
+  <ul class="feat"><li>Plan de temporada con IA hacia tu carrera objetivo</li><li>Inscripción sin perder plaza: cuenta atrás al minuto</li><li>Comparador de pruebas y mapa de viaje</li><li>Tus resultados y marcas por distancia</li></ul>
+  <span class="badge live"><i></i>Zona Podio, en directo</span>
 </section>
 
 <section class="sc demo" id="s-clubs" data-chap="La web">
   <p class="kick">Vybra Clubes</p>
   <h2 class="h2">Todo el club, <span class="y">en un panel</span>.</h2>
-  <ul class="feat"><li>Alta de deportistas con nombre y apellidos</li><li>Cuestionario de nivel: Iniciación, Intermedio, Avanzado, Élite</li><li>Calendario y objetivos de cada deportista</li><li>Calendario conjunto del club</li></ul>
+  <ul class="feat"><li>Alta de deportistas con nombre y apellidos</li><li>Cuestionario de nivel: Iniciación, Intermedio, Avanzado, Élite</li><li>Calendario y objetivos de cada deportista</li><li class="st" data-s="1">Y el calendario del club, aparte: todas las pruebas de todos sus deportistas</li></ul>
   <span class="badge demo"><i></i>Panel real con deportistas de ejemplo</span>
 </section>
 
@@ -492,7 +495,7 @@ const web=$('#web');let W=null,ready=false;
 try{localStorage.setItem('vck',localStorage.getItem('vck')||'ess')}catch(e){}
 web.src='/?gala='+Date.now();
 web.addEventListener('load',async()=>{W=web.contentWindow;
-  try{['S','page','tab','role','CODE','orgName','MAP','alojOn','alMk','alCache','atPins','atEv','sport','cpT','cpA','cpLv','cpM','atPl','user'].forEach(n=>{let ok=false;try{W.eval('typeof '+n);ok=W.eval('typeof '+n)!=='undefined'}catch(e){}if(!ok)return;try{Object.defineProperty(W,n,{configurable:true,get(){return W.eval(n)},set(v){W.__gv=v;W.eval(n+'=window.__gv')}})}catch(e){}})}catch(e){console.warn(e)}for(let i=0;i<60&&!(W.S&&W.S.ev&&W.S.ev.length);i++)await sleep(250);
+  try{['S','page','tab','role','CODE','orgName','MAP','alojOn','alMk','alCache','atPins','atEv','sport','cpT','cpA','cpLv','cpM','atPl','user','calM','calSel','calDay','today','regSt','boxAround','withD','osmFind','alClear','fdOpen','openEv','doAct','render','alRefresh'].forEach(n=>{let ok=false;try{W.eval('typeof '+n);ok=W.eval('typeof '+n)!=='undefined'}catch(e){}if(!ok||(n in W&&typeof W[n]=='function'))return;try{Object.defineProperty(W,n,{configurable:true,get(){return W.eval(n)},set(v){W.__gv=v;W.eval(n+'=window.__gv')}})}catch(e){}})}catch(e){console.warn(e)}for(let i=0;i<60&&!(W.S&&W.S.ev&&W.S.ev.length);i++)await sleep(250);
   try{W.document.documentElement.dataset.theme='dark';W.document.body.classList.add('fok')}catch(e){}
   ready=!!(W.S&&W.S.ev&&W.S.ev.length>50);if(ready){fillLive();if(cur>=0)runScene(cur,true)}else if(cur>=0)useRec(SC[cur].id)});
 function fillLive(){try{const ev=W.S.ev.filter(e=>e.dt>=W.today());const up=ev.length,pv=new Set(ev.filter(e=>e.country=='ES').map(e=>e.pv)).size,open=ev.filter(e=>W.regSt?/abiert/i.test(String((W.regSt(e)||{}).t||e.reg_state||'')):e.reg_state=='abierta').length;
@@ -507,10 +510,10 @@ const cu=$('#cur');
 function ptIn(sel){try{const el=typeof sel=='string'?W.document.querySelector(sel):sel;if(!el)return null;const r=el.getBoundingClientRect(),fr=web.getBoundingClientRect(),k=fr.width/1440;return {x:fr.left+(r.left+r.width/2)*k,y:fr.top+(r.top+r.height/2)*k}}catch(e){return null}}
 async function moveTo(sel,click){const p=ptIn(sel);if(!p)return false;cu.classList.add('v');cu.style.left=(p.x-4)+'px';cu.style.top=(p.y-2)+'px';await sleep(950);if(click){const d=document.createElement('div');d.className='rip';d.style.left=p.x+'px';d.style.top=p.y+'px';document.body.appendChild(d);setTimeout(()=>d.remove(),800)}return true}
 function hideCur(){cu.classList.remove('v')}
-async function scrollView(to,ms){try{const v=W.document.getElementById('view');const from=v.scrollTop,t0=performance.now();ms=ms||1600;await new Promise(res=>{const f=t=>{const p=Math.min(1,(t-t0)/ms),e=p<.5?4*p*p*p:1-Math.pow(-2*p+2,3)/2;v.scrollTop=from+(to-from)*e;p<1?requestAnimationFrame(f):res()};requestAnimationFrame(f)})}catch(e){}}
+async function scrollView(to,ms,el){try{const v=el||W.document.getElementById('view');const from=v.scrollTop,t0=performance.now();ms=ms||1600;await new Promise(res=>{const f=t=>{const p=Math.min(1,(t-t0)/ms),e=p<.5?4*p*p*p:1-Math.pow(-2*p+2,3)/2;v.scrollTop=from+(to-from)*e;p<1?requestAnimationFrame(f):res()};requestAnimationFrame(f)})}catch(e){}}
 function reveal(){try{W.document.querySelectorAll('.ap,.rv').forEach(e=>e.classList.add('in'))}catch(e){}}
-function cleanWeb(){try{W.role='';W.CODE='';W.orgName='';W.S.cp=null;W.S.ct=null;W.S.ost=null;W.alojOn=false;if(W.alClear)W.alClear();W.atPins=null;W.atEv=null;W.sport='';W.page=null}catch(e){}}
-const REC={'s-home':'media/web-hero.mp4','s-ficha':'media/web-ficha.mp4','s-sports':'media/web-sports.mp4','s-clubs':'media/web-clubs.mp4','s-org':'media/web-org.mp4'};let forceV=false;
+function cleanWeb(){try{W.role='';W.CODE='';W.orgName='';W.S.cp=null;W.S.ct=null;W.S.ost=null;W.alojOn=false;if(W.alClear)W.alClear();W.atPins=null;W.atEv=null;W.sport='';W.page=null;if(W.__demoU){W.user=null;W.S.me=null;W.S.sub=null;W.S.cal=[];W.S.radar=null;W.__demoU=false}}catch(e){}}
+const REC={'s-radar':'media/web-radar.mp4','s-podio':'media/web-podio.mp4','s-ficha':'media/web-ficha.mp4','s-sports':'media/web-sports.mp4','s-clubs':'media/web-clubs.mp4','s-org':'media/web-org.mp4'};let forceV=false;
 const devv=document.getElementById('devv');
 function useRec(id){const src=REC[id];const on=(forceV||!ready)&&!!src;document.getElementById('dev').classList.toggle('usev',on);if(on){if(!devv.src.endsWith(src))devv.src=src;devv.currentTime=0;devv.play().catch(()=>{})}else devv.pause()}
 setTimeout(()=>{if(!ready&&cur>=0)useRec(SC[cur].id)},9000);
@@ -518,7 +521,6 @@ const SEV=()=>W.S.ev.find(x=>x.nm=='Medio Maratón de Sevilla')||W.S.ev.find(x=>
 let tok=0;
 /* guiones de cada escena de la web */
 const PILOT={
- 's-home':async t=>{cleanWeb();W.tab='inicio';W.render();await sleep(900);if(t!==tok)return;await scrollView(0,10);await sleep(1800);if(t!==tok)return;reveal();await scrollView(880,2600);await sleep(1200);if(t!==tok)return;await scrollView(1900,2600)},
  's-map':async t=>{cleanWeb();W.tab='mapa';W.render();for(let i=0;i<30&&!(W.MAP&&W.MAP.loaded&&W.MAP.loaded());i++)await sleep(200);if(t!==tok)return;try{W.MAP.jumpTo({center:[-3.7,40.1],zoom:4.9});await sleep(1400);W.MAP.flyTo({center:[-5.3,37.6],zoom:7.2,duration:4200,curve:1.5})}catch(e){}await sleep(4600);if(t!==tok)return;await moveTo('#mcnt',false);await sleep(600);hideCur()},
  's-ficha':async t=>{cleanWeb();const e=SEV();try{W.sessionStorage.setItem('vv:'+e.id,'1')}catch(x){}await W.openEv(e.id);W.render();await sleep(1200);if(t!==tok)return;reveal();await moveTo('[data-a="part"],[data-a="participo"],.btn.part',true);await sleep(900);if(t!==tok)return;hideCur();await scrollView(560,2400);await sleep(1600);if(t!==tok)return;await scrollView(1150,2400)},
  's-sports':async t=>{cleanWeb();for(const k of ['trail','hybrid','crossfit']){if(t!==tok)return;W.fdOpen(k);await sleep(700);reveal();await sleep(2600)}await scrollView(1200,2400)},
@@ -527,12 +529,27 @@ const PILOT={
    let L=[];try{const bx=W.boxAround(e.lat,e.lon,1.5);L=W.withD(await W.osmFind('comer',bx[0],bx[1],bx[2],bx[3]),e.lat,e.lon).slice(0,5)}catch(x){}
    if(t!==tok)return;box.innerHTML='<div class="bub me">¿Dónde se puede comer cerca de la salida?</div><div class="bub ai">'+(L.length?'Cerca de la salida del <b>'+e.nm+'</b> tienes:<div class="pl">'+L.map(p=>'<div><b>'+p.nm+'</b><span>'+p.t+' · '+String(p.d).replace('.',',')+' km</span></div>').join('')+'</div><small>Sitios reales de OpenStreetMap. Confirma horarios antes de ir.</small>':'Ahora mismo no puedo cargar los sitios de la zona.')+'</div>';
    try{W.atPl[e.id]=L.map(p=>Object.assign({},p,{k:'comer'}));W.doAct('atmap',e.id);await sleep(2500);W.MAP&&W.MAP.easeTo({zoom:15.2,duration:2200})}catch(x){}},
+ 's-radar':async t=>{cleanWeb();const ev=W.S.ev,td=W.today(),inD=(d,n)=>{const x=new Date(d+'T00:00');x.setDate(x.getDate()+n);return x.toISOString().slice(0,10)};
+   const pick=ids=>ids.map(id=>ev.find(e=>e.id==id)).filter(Boolean);let C=pick(['a14','h14','n52','hx-hyrox-madrid-2027','h16']);if(C.length<3)C=ev.filter(e=>e.pv=='Sevilla').slice(0,4);
+   W.__demoU=true;W.user={id:'demo-gala',email:''};W.S.me={name:'Jesús'};W.S.sub={active:true,plan:'podio',price:5.99};W.S.cal=C.map(e=>({eid:e.id,dt:e.dt,nm:e.nm,pv:e.pv,loc:e.loc,sp:e.sp,dists:[]}));
+   const cl=ev.filter(e=>e.cierre&&e.cierre>=td&&e.cierre<=inD(td,30)).sort((a,b)=>a.cierre.localeCompare(b.cierre)).map(e=>({nm:e.nm,pv:e.pv,dt:e.dt,closes_on:e.cierre,days_left:Math.round((Date.parse(e.cierre)-Date.parse(td))/864e5)}));
+   const op=ev.filter(e=>e.reg_open&&String(e.reg_open).slice(0,10)>td).sort((a,b)=>String(a.reg_open).localeCompare(String(b.reg_open))).map(e=>({nm:e.nm,pv:e.pv,dt:e.dt,opens_at:e.reg_open}));
+   const dec=s=>{const x=W.document.createElement('textarea');x.innerHTML=s||'';return x.value};ev.forEach(e=>{if(/&#?\w+;/.test(e.nm||''))e.nm=dec(e.nm)});
+   const so=ev.filter(e=>e.reg_state=='agotada').map(e=>({nm:e.nm,pv:e.pv,dt:e.dt}));
+   W.S.radar={opening:op,closing:cl,sold_out:so};$('#krd').textContent=`Radar: ${op.length} inscripciones a punto de abrir, ${cl.length} que cierran este mes y ${so.length} agotadas`;
+   try{W.calM=new Date(C[0].dt.slice(0,8)+'01T00:00')}catch(x){}W.tab='cal';W.page=null;W.render();
+   for(let k=0;k<6;k++){await sleep(300);if(t!==tok)return;if(!W.user){W.user={id:'demo-gala',email:''};W.S.me={name:'Jesús'};W.S.sub={active:true,plan:'podio',price:5.99};W.S.cal=C.map(e=>({eid:e.id,dt:e.dt,nm:e.nm,pv:e.pv,loc:e.loc,sp:e.sp,dists:[]}));W.render()}}await sleep(400);if(t!==tok)return;reveal();
+   await moveTo('.cg b, .cg .ev, .cg i',true);await sleep(800);if(t!==tok)return;hideCur();
+   const r=W.document.getElementById('rdr'),as=W.document.querySelector('.calside');if(r&&as)await scrollView(Math.max(0,r.getBoundingClientRect().top-as.getBoundingClientRect().top+as.scrollTop-50),2600,as)},
+ 's-podio':async t=>{cleanWeb();W.page={k:'podio',v:'temporada'};W.render();await sleep(1400);if(t!==tok)return;reveal();
+   for(const k of ['inscripcion','resultados']){await sleep(2400);if(t!==tok)return;await moveTo('.podn [data-v="'+k+'"]',true);W.page={k:'podio',v:k};W.render();reveal()}hideCur();await sleep(1800);if(t!==tok)return;
+   const sc=W.document.getElementById('podsc');if(sc){await scrollView(Math.max(0,sc.getBoundingClientRect().top+W.document.getElementById('view').scrollTop-70),2600);reveal()}},
  's-clubs':async t=>{cleanWeb();W.role='club';W.CODE='demo';W.orgName='Club Vybra';W.tab='acc';W.cpT='dep';W.cpA=null;W.cpLv='';
    W.S.cp={club:{name:'Club Vybra',slug:'club-vybra',sport:'Atletismo',province:'Sevilla'},events:[]};
    W.S.ct={athletes:[{id:'a1',first_name:'Lucía',last_name:'Martín Ruiz',discipline:'10 km',category:'Sénior',level:'avanzado',score:12,quiz:{}},{id:'a2',first_name:'Pablo',last_name:'Gómez',discipline:'Medio maratón',category:'Máster 40',level:'intermedio',score:8},{id:'a3',first_name:'Marta',last_name:'Sánchez Vela',discipline:'Trail',category:'Sub-23',level:'elite',score:16},{id:'a4',first_name:'Diego',last_name:'Ortega',discipline:'5 km',category:'Sénior',level:'iniciacion',score:3}],
    events:[{id:'e1',athlete_id:'a1',name:'Cross de Itálica',dt:'2026-12-14',place:'Santiponce',category:'10 km',priority:'B',goal:'Top 20',status:'inscrito'},{id:'e2',athlete_id:'a1',name:'Medio Maratón de Sevilla',dt:'2026-12-13',place:'Sevilla',category:'21 km',priority:'A',goal:'Bajar de 1:25:00',status:'planificada'},{id:'e4',athlete_id:'a2',name:'Zurich Maratón de Sevilla',dt:'2027-02-21',place:'Sevilla',priority:'A',status:'inscrito'},{id:'e5',athlete_id:'a3',name:'Trail Ciudad del Cobre',dt:'2026-12-13',place:'Gerena',priority:'A',status:'planificada'}],
    goals:[{id:'g1',athlete_id:'a1',title:'Bajar de 36:00 en 10 km',due:'2027-03-01',done:false},{id:'g2',athlete_id:'a1',title:'Tres semanas seguidas sin molestias',done:true},{id:'g3',athlete_id:'a2',title:'Terminar el maratón',done:false}]};
-   W.page=null;W.render();await sleep(1800);if(t!==tok)return;await moveTo('.ctc[data-v="a1"]',true);W.doAct('cta','a1');await sleep(2600);if(t!==tok)return;hideCur();await scrollView(520,2000);await sleep(2200);if(t!==tok)return;W.cpA=null;W.cpT='cal';W.cpM=new Date('2026-12-01T00:00');W.render()},
+   W.page=null;W.render();await sleep(1800);if(t!==tok)return;await moveTo('.ctc[data-v="a1"]',true);W.doAct('cta','a1');await sleep(2600);if(t!==tok)return;hideCur();await scrollView(520,2000);},
  's-org':async t=>{cleanWeb();W.role='org';W.CODE='demo';W.orgName='Club Triana';W.tab='acc';W.page=null;
    const d=n=>{const x=new Date();x.setDate(x.getDate()-n);return x.toISOString().slice(0,10)};
    const ser=[...Array(30)].map((_,i)=>({d:d(29-i),n:Math.round(4+i*1.2+((i*7)%5)*2)}));
@@ -548,13 +565,13 @@ const SC=[
  {id:'s-brand',tx:'dot',spk:'Jesús',t:'1:25',vid:0,ecg:1,g:['30vw','40vh','30vw','40vh'],brand:0,notes:'Pausa. Que aparezca la marca. «Vybra. Bienvenidos a Vybra.» Se escribe el dominio: vybra.eu.'},
  {id:'s-how',tx:'sweep',spk:'Ángel',t:'1:40',vid:0,ecg:1,steps:3,g:['-10vw','70vh','85vw','-10vh'],notes:'Ángel: tres promesas. (clic) Todo en un solo mapa. (clic) Siempre la web oficial, sin comisión. (clic) Llegar a tiempo: te avisamos cuando abre y cierra la inscripción.'},
  {id:'s-reel',tx:'ecg',spk:'Ángel',t:'1:55',vid:0,ecg:0,steps:1,g:['60vw','70vh','-20vw','-10vh'],notes:'«Y esto es lo que hemos construido.» La web grabada en ordenador y en el móvil. (clic) Zoom dentro de la pantalla: entramos en la web.'},
- {id:'s-home',spk:'Ángel',t:'2:10',dev:'left',ecg:0,g:['70vw','70vh','-20vw','-20vh'],notes:'«Esto no es una maqueta: es vybra.eu, ahora mismo, en directo.» La web baja sola.'},
  {id:'s-map',spk:'Ángel',t:'2:30',dev:'left',g:['75vw','-10vh','-15vw','60vh'],notes:'El mapa vuela hasta Andalucía. Decir la cifra en directo: «hoy hay X pruebas próximas, cada una con su web oficial».'},
  {id:'s-ficha',spk:'Ángel',t:'2:55',dev:'left',g:['80vw','60vh','-20vw','0vh'],notes:'Ficha real del Medio Maratón de Sevilla. «Encuentras la prueba, pulsas Participo y se guarda en tu calendario. Te avisamos cuando abre y cierra la inscripción.»'},
  {id:'s-sports',spk:'Jesús',t:'3:25',dev:'left',g:['70vw','-15vh','-10vw','75vh'],notes:'Jesús: «Y no nos quedamos en el asfalto: Trail, Hybrid Race y, esta semana, CrossFit, con competiciones reales de toda España.»'},
- {id:'s-sleep',spk:'Jesús',t:'3:55',dev:'left',g:['75vw','70vh','-15vw','-15vh'],notes:'«¿Y dónde duermo? Activas Dónde dormir y aparecen las casas azules: todos los alojamientos de alrededor de la salida.»'},
- {id:'s-atlas',spk:'Ángel',t:'4:20',dev:'left',g:['80vw','-10vh','-20vw','70vh'],notes:'Ángel: «A Vybra Atlas le preguntas: ¿dónde se puede comer cerca? Y te responde con sitios reales de la zona, que aparecen en el mapa.» (Los sitios se cargan en directo de OpenStreetMap.)'},
- {id:'s-clubs',spk:'Jesús',t:'4:50',dev:'left',g:['70vw','60vh','-10vw','-10vh'],notes:'Jesús: «Para los clubes: el club da de alta a sus deportistas, cada uno hace un cuestionario de nivel y tiene su calendario con objetivos. Y el entrenador ve todo el club de un vistazo.» Panel real, deportistas de ejemplo.'},
+ {id:'s-sleep',spk:'Jesús',t:'3:30',dev:'left',steps:1,g:['75vw','70vh','-15vw','-15vh'],notes:'Jesús: «¿Y dónde duermo? Activas Dónde dormir y aparecen las casas azules: hoteles, hostales y apartamentos alrededor de la salida.» (clic) Ángel: «Y si le preguntas a Vybra Atlas dónde comer cerca, te responde con sitios reales que aparecen en el mapa.»'},
+ {id:'s-radar',spk:'Ángel',t:'4:10',dev:'left',g:['80vw','-10vh','-20vw','70vh'],notes:'Ángel: «Pulsas Participo y la prueba entra en tu calendario. Y el Radar te dice qué inscripciones abren, cuáles cierran este mes y cuáles se agotan.» Calendario de ejemplo; pruebas y Radar con datos reales.'},
+ {id:'s-podio',spk:'Ángel',t:'4:40',dev:'left',g:['70vw','70vh','-10vw','-10vh'],notes:'«Y Vybra Podio, el plan completo: plan de temporada con IA, inscripción sin perder plaza, comparador, mapa de viaje y tus marcas.»'},
+ {id:'s-clubs',spk:'Jesús',t:'5:05',dev:'left',steps:1,g:['70vw','60vh','-10vw','-10vh'],notes:'Jesús: «Para los clubes: el club da de alta a sus deportistas, cada uno hace un cuestionario de nivel y tiene su calendario con objetivos. Y el entrenador ve todo el club de un vistazo.» Panel real, deportistas de ejemplo.'},
  {id:'s-org',spk:'Jesús',t:'5:20',dev:'left',g:['75vw','-10vh','-15vw','70vh'],notes:'«Y para quien organiza: publicar es gratis y sin comisión. Ve sus visitas, cuántos pulsan Participo, lo que opinan, y puede destacar su prueba.» Cifras de ejemplo.'},
  {id:'s-diff',tx:'sweep',spk:'Ángel',t:'5:45',vid:0,ecg:1,g:['-15vw','-10vh','80vw','70vh'],notes:'Ángel: «¿Por qué Vybra? Porque nadie junta todo esto en un solo sitio: todas las pruebas, el mapa, los avisos, dónde dormir y el panel para clubes y organizadores.»'},
  {id:'s-voice',tx:'dot',spk:'Jesús',t:'6:10',vid:0,ecg:1,g:['60vw','60vh','-20vw','-20vh'],notes:'Jesús: «Vybra con y, la de vibrar. Dominio propio, un rojo que se reconoce y un latido como firma. Y el contenido lo grabamos nosotros: @vybra_es.»'},
@@ -572,13 +589,15 @@ function setBg(s){R.setProperty('--vo',s.vid||0);R.setProperty('--vd',s.vd!=null
   if(s.vid>0){bv.play().catch(()=>{})}}
 function applySteps(i){const el=secs[i];$$('#'+SC[i].id+' .st').forEach(x=>{x.classList.toggle('in',+x.dataset.s<=step)});
   if(SC[i].id==='s-reel')el.classList.toggle('zoom',step>=1);
+  if(SC[i].id==='s-sleep'){el.classList.toggle('atl',step>=1);if(step>=1&&ready&&!forceV){if(!el._at){el._at=1;PILOT['s-atlas'](tok)}}else{el._at=0;$('#atlas').classList.remove('v')}}
+  if(SC[i].id==='s-clubs'&&ready&&!forceV){try{if(step>=1){W.cpA=null;W.cpT='cal';W.cpM=new Date('2026-12-01T00:00');W.render();W.document.getElementById('view').scrollTop=0}else if(el._cs){W.cpT='dep';W.cpA=null;W.render()}el._cs=step}catch(e){}}
   if(SC[i].id==='s-field'){el.classList.toggle('collapse',step>=4);el.classList.toggle('dim',step>=1);$('#fieldc').style.opacity=step>=4?0:1;$('#fieldc').style.transition='opacity .8s';
     $$('#s-field .num').forEach(n=>{const b=n.querySelector('b');if(+n.dataset.s<=step&&!b._d){b._d=1;count(b,+b.dataset.count,1400)}})}
   if(SC[i].id==='s-biz'||SC[i].id==='s-how')null;}
 async function runScene(i,again){const s=SC[i];const t=++tok;
   if(s.dev){dev(s.dev);useRec(s.id);if(ready&&!forceV&&PILOT[s.id]){try{await PILOT[s.id](t)}catch(e){console.warn(e)}}}
   else{dev('hide');hideCur();devv.pause()}
-  if(s.id!=='s-atlas')$('#atlas').classList.remove('v')}
+  if(s.id!=='s-sleep')$('#atlas').classList.remove('v');secs[i]._at=0}
 let busy=false;const tx=$('#tx'),tp1=tx.querySelector('.p1'),tp2=tx.querySelector('.p2'),tmk=tx.querySelector('.mk');
 const MK='V<span style="color:#fff">y</span>bra<svg viewBox="0 0 200 40"><path pathLength="1" d="M0 20H80l6-12 10 26 8-30 8 22 6-6H200"/></svg>';
 function go(i,dir){if(busy||i<0||i>=SC.length)return;const t=SC[i].tx;
