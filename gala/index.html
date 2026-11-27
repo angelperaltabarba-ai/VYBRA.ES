@@ -227,6 +227,22 @@ body.nocur,body.nocur *{cursor:none!important}
 .sidev{position:fixed;z-index:21;right:5vw;bottom:10vh;height:34vh;aspect-ratio:9/16;border-radius:22px;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.7),0 0 0 1px rgba(255,255,255,.12);opacity:0;transform:translateY(40px) rotate(4deg);transition:opacity .8s var(--e),transform 1.1s var(--e);pointer-events:none}
 .sidev.v{opacity:1;transform:rotate(2deg)}
 .sidev video{width:100%;height:100%;object-fit:cover}
+/* transiciones entre diapositivas */
+#tx{position:fixed;inset:0;z-index:45;pointer-events:none;visibility:hidden}
+#tx .p{position:absolute;inset:-2px;will-change:transform}
+#tx .p1{background:var(--red)}
+#tx .p2{background:#0b0b0d}
+#tx .mk{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font:italic 900 clamp(40px,6vw,110px)/1 var(--fl);color:#fff;letter-spacing:-.02em;white-space:nowrap}
+#tx .mk svg{display:block;width:clamp(140px,16vw,300px);height:auto;margin:1.2vh auto 0;overflow:visible}
+#tx .mk path{fill:none;stroke:#fff;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+/* página 3 → 4: el punto */
+.dotmsg{position:absolute;left:50%;top:calc(50% + 6vh);transform:translate(-50%,20px);text-align:center;opacity:0;transition:opacity .8s var(--e) 1.1s,transform 1s var(--e) 1.1s;width:min(80vw,1100px)}
+.dotmsg b{display:block;font:800 clamp(30px,4vw,74px)/1.05 var(--fh);letter-spacing:-.045em}
+.dotmsg span{display:block;margin-top:1.6vh;font:600 clamp(15px,1.3vw,24px)/1.35 var(--fh);color:var(--mut)}
+.collapse .dotmsg{opacity:1;transform:translate(-50%,0)}
+.collapse .dot{animation:beat 1.3s ease-in-out 1.6s infinite}
+@keyframes beat{0%,100%{transform:scale(1)}14%{transform:scale(1.45)}28%{transform:scale(1)}42%{transform:scale(1.25)}70%{transform:scale(1)}}
+.collapse .src{opacity:0;transition:opacity .5s}
 @media (prefers-reduced-motion:reduce){*{transition-duration:.01s!important;animation-duration:.01s!important}}
 </style>
 </head>
@@ -270,6 +286,7 @@ body.nocur,body.nocur *{cursor:none!important}
       <div class="num st" data-s="3"><b data-count="154">0</b><span>con el organizador identificado: solo 3 de cada 10</span></div>
     </div>
   </div>
+  <div class="dotmsg"><b>Todo eso debería caber <span class="y" style="display:inline;color:var(--red);font:inherit;margin:0">en un solo punto</span>.</b><span>Un sitio. Todas las pruebas. Siempre con la web oficial.</span></div>
   <p class="src">Base de datos de Vybra · pruebas de noviembre de 2026 a octubre de 2027 · consulta del 27 de noviembre de 2026</p>
 </section>
 
@@ -441,6 +458,7 @@ body.nocur,body.nocur *{cursor:none!important}
 </section>
 
 </main>
+<div id="tx"><div class="p p1"></div><div class="p p2"></div><div class="mk"></div></div>
 <div id="prog"></div>
 <div id="hint">→ / espacio: avanzar · ← volver · F pantalla completa · P notas del presentador · V web grabada/en directo · B pantalla negra</div>
 <div id="black"></div>
@@ -525,11 +543,11 @@ const PILOT={
 /* ---------- escenas ---------- */
 const SC=[
  {id:'s-open',spk:'Ángel',t:'0:00',vid:0,g:['8vw','20vh','90vw','70vh'],ecg:0,brand:0,notes:'Silencio dos segundos. Se dibuja el latido. Leer despacio: «Cada fin de semana alguien se queda sin correr una carrera que no sabía que existía.»'},
- {id:'s-why',spk:'Ángel',t:'0:15',vid:0,steps:1,g:['-20vw','60vh','100vw','-10vh'],notes:'«Creemos que nadie debería quedarse sin su carrera por no enterarse a tiempo.» (clic) «Por eso hemos construido el sitio donde empieza cada carrera.» Presentarnos: somos Ángel Peralta y Jesús Chamorro, estudiantes de Comunicación en Sevilla, y esto es Vybra.'},
- {id:'s-field',spk:'Jesús',t:'0:45',vid:.25,vd:.8,vs:1.25,steps:4,g:['60vw','-20vh','-10vw','80vh'],notes:'Jesús: «¿Cuánto tiene que mirar un deportista en un año?» (clic) 526 pruebas entre noviembre y octubre. (clic) Repartidas en 114 webs, cuentas y PDF distintos. (clic) Y solo 154 con el organizador identificado: 3 de cada 10. (clic) Todo ese ruido… cabe en un solo punto.'},
- {id:'s-brand',spk:'Jesús',t:'1:25',vid:0,ecg:1,g:['30vw','40vh','30vw','40vh'],brand:0,notes:'Pausa. Que aparezca la marca. «Vybra. Conecta con el deporte.» Se escribe el dominio: vybra.eu.'},
- {id:'s-how',spk:'Ángel',t:'1:40',vid:0,ecg:1,steps:3,g:['-10vw','70vh','85vw','-10vh'],notes:'Ángel: tres promesas. (clic) Todo en un solo mapa. (clic) Siempre la web oficial, sin comisión. (clic) Llegar a tiempo: te avisamos cuando abre y cierra la inscripción.'},
- {id:'s-reel',spk:'Ángel',t:'1:55',vid:0,ecg:0,steps:1,g:['60vw','70vh','-20vw','-10vh'],notes:'«Y esto es lo que hemos construido.» La web grabada en ordenador y en el móvil. (clic) Zoom dentro de la pantalla: entramos en la web.'},
+ {id:'s-why',tx:'sweep',spk:'Ángel',t:'0:15',vid:0,steps:1,g:['-20vw','60vh','100vw','-10vh'],notes:'«Creemos que nadie debería quedarse sin su carrera por no enterarse a tiempo.» (clic) «Por eso hemos construido el sitio donde empieza cada carrera.» Presentarnos: somos Ángel Peralta y Jesús Chamorro, estudiantes de Comunicación en Sevilla, y esto es Vybra.'},
+ {id:'s-field',tx:'sweep',spk:'Jesús',t:'0:45',vid:.25,vd:.8,vs:1.25,steps:4,g:['60vw','-20vh','-10vw','80vh'],notes:'Jesús: «¿Cuánto tiene que mirar un deportista en un año?» (clic) 526 pruebas entre noviembre y octubre. (clic) Repartidas en 114 webs, cuentas y PDF distintos. (clic) Y solo 154 con el organizador identificado: 3 de cada 10. (clic) Todo ese ruido… cabe en un solo punto.'},
+ {id:'s-brand',tx:'dot',spk:'Jesús',t:'1:25',vid:0,ecg:1,g:['30vw','40vh','30vw','40vh'],brand:0,notes:'Pausa. Que aparezca la marca. «Vybra. Conecta con el deporte.» Se escribe el dominio: vybra.eu.'},
+ {id:'s-how',tx:'sweep',spk:'Ángel',t:'1:40',vid:0,ecg:1,steps:3,g:['-10vw','70vh','85vw','-10vh'],notes:'Ángel: tres promesas. (clic) Todo en un solo mapa. (clic) Siempre la web oficial, sin comisión. (clic) Llegar a tiempo: te avisamos cuando abre y cierra la inscripción.'},
+ {id:'s-reel',tx:'ecg',spk:'Ángel',t:'1:55',vid:0,ecg:0,steps:1,g:['60vw','70vh','-20vw','-10vh'],notes:'«Y esto es lo que hemos construido.» La web grabada en ordenador y en el móvil. (clic) Zoom dentro de la pantalla: entramos en la web.'},
  {id:'s-home',spk:'Ángel',t:'2:10',dev:'left',ecg:0,g:['70vw','70vh','-20vw','-20vh'],notes:'«Esto no es una maqueta: es vybra.eu, ahora mismo, en directo.» La web baja sola.'},
  {id:'s-map',spk:'Ángel',t:'2:30',dev:'left',g:['75vw','-10vh','-15vw','60vh'],notes:'El mapa vuela hasta Andalucía. Decir la cifra en directo: «hoy hay X pruebas próximas, cada una con su web oficial».'},
  {id:'s-ficha',spk:'Ángel',t:'2:55',dev:'left',g:['80vw','60vh','-20vw','0vh'],notes:'Ficha real del Medio Maratón de Sevilla. «Encuentras la prueba, pulsas Participo y se guarda en tu calendario. Te avisamos cuando abre y cierra la inscripción.»'},
@@ -538,12 +556,12 @@ const SC=[
  {id:'s-atlas',spk:'Ángel',t:'4:20',dev:'left',g:['80vw','-10vh','-20vw','70vh'],notes:'Ángel: «A Vybra Atlas le preguntas: ¿dónde se puede comer cerca? Y te responde con sitios reales de la zona, que aparecen en el mapa.» (Los sitios se cargan en directo de OpenStreetMap.)'},
  {id:'s-clubs',spk:'Jesús',t:'4:50',dev:'left',g:['70vw','60vh','-10vw','-10vh'],notes:'Jesús: «Para los clubes: el club da de alta a sus deportistas, cada uno hace un cuestionario de nivel y tiene su calendario con objetivos. Y el entrenador ve todo el club de un vistazo.» Panel real, deportistas de ejemplo.'},
  {id:'s-org',spk:'Jesús',t:'5:20',dev:'left',g:['75vw','-10vh','-15vw','70vh'],notes:'«Y para quien organiza: publicar es gratis y sin comisión. Ve sus visitas, cuántos pulsan Participo, lo que opinan, y puede destacar su prueba.» Cifras de ejemplo.'},
- {id:'s-diff',spk:'Ángel',t:'5:45',vid:0,ecg:1,g:['-15vw','-10vh','80vw','70vh'],notes:'Ángel: «¿Por qué Vybra? Porque nadie junta todo esto en un solo sitio: todas las pruebas, el mapa, los avisos, dónde dormir y el panel para clubes y organizadores.»'},
- {id:'s-voice',spk:'Jesús',t:'6:10',vid:0,ecg:1,g:['60vw','60vh','-20vw','-20vh'],notes:'Jesús: «Vybra con y, la de vibrar. Dominio propio, un rojo que se reconoce y un latido como firma. Y el contenido lo grabamos nosotros: @vybra_es.»'},
- {id:'s-proof',spk:'Jesús',t:'6:35',vid:.3,vd:.8,vs:1.18,ecg:0,g:['-10vw','70vh','80vw','-10vh'],notes:'«Lo que ya hemos conseguido»: pruebas en directo, provincias, 60 cuentas creadas y 36 en solo 24 horas durante SINERCOM. Y todo esto en ocho semanas.'},
- {id:'s-biz',spk:'Ángel',t:'7:00',vid:0,ecg:1,steps:1,g:['70vw','-10vh','-10vw','70vh'],notes:'Ángel: «Ver pruebas es gratis para siempre. Plus 2,50, Podio 5,99 y Amigos 7,99 al mes.» (clic) «Socios fundadores a mitad de precio, Vybra Clubes, pruebas destacadas y nuestros servicios para eventos.»'},
- {id:'s-team',spk:'Jesús',t:'7:30',vid:0,ecg:1,g:['30vw','80vh','30vw','-30vh'],notes:'Jesús presenta al equipo: Ángel y yo como cofundadores; Gonzalo, Ramón, Fernando y Juan.'},
- {id:'s-end',spk:'Los dos',t:'7:45',vid:.5,vd:.72,vs:1.02,ecg:1,steps:1,g:['5vw','10vh','95vw','90vh'],notes:'Los dos: «Entrad ahora en vybra.eu.» (clic: aparece el QR) «Gracias. Bienvenidos a Vybra.»'}
+ {id:'s-diff',tx:'sweep',spk:'Ángel',t:'5:45',vid:0,ecg:1,g:['-15vw','-10vh','80vw','70vh'],notes:'Ángel: «¿Por qué Vybra? Porque nadie junta todo esto en un solo sitio: todas las pruebas, el mapa, los avisos, dónde dormir y el panel para clubes y organizadores.»'},
+ {id:'s-voice',tx:'dot',spk:'Jesús',t:'6:10',vid:0,ecg:1,g:['60vw','60vh','-20vw','-20vh'],notes:'Jesús: «Vybra con y, la de vibrar. Dominio propio, un rojo que se reconoce y un latido como firma. Y el contenido lo grabamos nosotros: @vybra_es.»'},
+ {id:'s-proof',tx:'ecg',spk:'Jesús',t:'6:35',vid:.3,vd:.8,vs:1.18,ecg:0,g:['-10vw','70vh','80vw','-10vh'],notes:'«Lo que ya hemos conseguido»: pruebas en directo, provincias, 60 cuentas creadas y 36 en solo 24 horas durante SINERCOM. Y todo esto en ocho semanas.'},
+ {id:'s-biz',tx:'sweep',spk:'Ángel',t:'7:00',vid:0,ecg:1,steps:1,g:['70vw','-10vh','-10vw','70vh'],notes:'Ángel: «Ver pruebas es gratis para siempre. Plus 2,50, Podio 5,99 y Amigos 7,99 al mes.» (clic) «Socios fundadores a mitad de precio, Vybra Clubes, pruebas destacadas y nuestros servicios para eventos.»'},
+ {id:'s-team',tx:'sweep',spk:'Jesús',t:'7:30',vid:0,ecg:1,g:['30vw','80vh','30vw','-30vh'],notes:'Jesús presenta al equipo: Ángel y yo como cofundadores; Gonzalo, Ramón, Fernando y Juan.'},
+ {id:'s-end',tx:'dot',spk:'Los dos',t:'7:45',vid:.5,vd:.72,vs:1.02,ecg:1,steps:1,g:['5vw','10vh','95vw','90vh'],notes:'Los dos: «Entrad ahora en vybra.eu.» (clic: aparece el QR) «Gracias. Bienvenidos a Vybra.»'}
 ];
 const secs=SC.map(s=>document.getElementById(s.id));
 let cur=-1,step=0;
@@ -561,7 +579,28 @@ async function runScene(i,again){const s=SC[i];const t=++tok;
   if(s.dev){dev(s.dev);useRec(s.id);if(ready&&!forceV&&PILOT[s.id]){try{await PILOT[s.id](t)}catch(e){console.warn(e)}}}
   else{dev('hide');hideCur();devv.pause()}
   if(s.id!=='s-atlas')$('#atlas').classList.remove('v')}
-function go(i,dir){if(i<0||i>=SC.length)return;const prev=cur;cur=i;step=dir<0&&SC[i].steps?SC[i].steps:0;
+let busy=false;const tx=$('#tx'),tp1=tx.querySelector('.p1'),tp2=tx.querySelector('.p2'),tmk=tx.querySelector('.mk');
+const MK='V<span style="color:#fff">y</span>bra<svg viewBox="0 0 200 40"><path pathLength="1" d="M0 20H80l6-12 10 26 8-30 8 22 6-6H200"/></svg>';
+function go(i,dir){if(busy||i<0||i>=SC.length)return;const t=SC[i].tx;
+  if(dir>0&&cur>=0&&t&&!matchMedia('(prefers-reduced-motion:reduce)').matches){busy=true;transition(t,()=>doGo(i,dir),()=>{busy=false});return}
+  doGo(i,dir)}
+function transition(t,mid,end){tx.style.visibility='visible';tmk.innerHTML='';const io='cubic-bezier(.77,0,.175,1)';
+  [tp1,tp2,tmk].forEach(e=>{e.getAnimations().forEach(a=>a.cancel());e.style.cssText=''});
+  if(t==='sweep'){tp2.style.display='none';
+    tp1.animate([{transform:'translateX(-105%) skewX(-14deg)'},{transform:'translateX(0) skewX(0)'}],{duration:520,easing:io,fill:'forwards'});
+    setTimeout(()=>{mid();tp1.animate([{transform:'translateX(0) skewX(0)'},{transform:'translateX(105%) skewX(-14deg)'}],{duration:620,easing:io,fill:'forwards'}).onfinish=()=>{tx.style.visibility='hidden';end()}},560)}
+  else if(t==='dot'){tp2.style.display='none';tmk.innerHTML=MK;
+    tp1.animate([{clipPath:'circle(0% at 50% 50%)'},{clipPath:'circle(75% at 50% 50%)'}],{duration:700,easing:io,fill:'forwards'});
+    tmk.animate([{opacity:0,transform:'translate(-50%,-50%) scale(.6)'},{opacity:1,transform:'translate(-50%,-50%) scale(1)'}],{duration:520,delay:380,easing:'cubic-bezier(.23,1,.32,1)',fill:'both'});
+    tmk.querySelector('path').animate([{strokeDasharray:1,strokeDashoffset:1},{strokeDasharray:1,strokeDashoffset:0}],{duration:600,delay:500,fill:'both'});
+    setTimeout(()=>{mid();tmk.animate([{opacity:1,transform:'translate(-50%,-50%) scale(1)'},{opacity:0,transform:'translate(-50%,-50%) scale(1.8)'}],{duration:600,easing:io,fill:'forwards'});
+      tp1.animate([{opacity:1},{opacity:0}],{duration:900,easing:'ease-out',fill:'forwards'}).onfinish=()=>{tx.style.visibility='hidden';end()}},1250)}
+  else if(t==='ecg'){tp1.style.display='none';tp2.style.background='#000';tmk.innerHTML='<svg viewBox="0 0 200 40" style="width:70vw"><path pathLength="1" d="M0 20H80l6-12 10 26 8-30 8 22 6-6H200" style="stroke:#E5121B;stroke-width:4;filter:drop-shadow(0 0 12px #E5121B)"/></svg>';
+    tp2.animate([{opacity:0},{opacity:1}],{duration:350,fill:'forwards'});
+    tmk.querySelector('path').animate([{strokeDasharray:'.25 1',strokeDashoffset:1.25},{strokeDasharray:'.25 1',strokeDashoffset:0}],{duration:900,easing:'ease-in-out',fill:'both'});
+    setTimeout(()=>{mid();tp2.animate([{opacity:1},{opacity:0}],{duration:700,fill:'forwards'});tmk.animate([{opacity:1},{opacity:0}],{duration:400,fill:'forwards'}).onfinish=()=>{};setTimeout(()=>{tx.style.visibility='hidden';end()},720)},900)}
+  else{mid();tx.style.visibility='hidden';end()}}
+function doGo(i,dir){const prev=cur;cur=i;step=dir<0&&SC[i].steps?SC[i].steps:0;
   secs.forEach((el,k)=>{el.classList.toggle('on',k===i);el.classList.toggle('gone',k===prev&&k!==i&&dir>0)});
   setTimeout(()=>{if(prev>=0&&prev!==cur)secs[prev].classList.remove('gone')},1300);
   const s=SC[i];setBg(s);$('#chapn').textContent=String(i+1).padStart(2,'0')+' / '+SC.length;$('#chapt').textContent=secs[i].dataset.chap||'';
