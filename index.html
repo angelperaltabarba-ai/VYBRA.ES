@@ -6,7 +6,7 @@
 <title>Vybra · Conecta con el deporte</title>
 <link rel="preconnect" href="https://fgrcdgzqxxmlouicwfow.supabase.co" crossorigin><meta name="theme-color" content="#E5121B"><meta property="og:title" content="Vybra · Conecta con el deporte"><meta property="og:description" content="Mapa de competiciones deportivas populares, calendario personal y cuenta atrás de inscripción."><meta property="og:type" content="website"><meta property="og:locale" content="es_ES"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,400;0,500;0,600;0,700;0,800;1,800&display=swap"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Franklin:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,800;1,900&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap">
 <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.css">
-<script>(function(){try{var t=localStorage.getItem('vtheme');if(!t)t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';document.documentElement.dataset.theme=t}catch(e){document.documentElement.dataset.theme='dark'}})()</script>
+<script>(function(){try{var t=localStorage.getItem('vtheme');if(!t)t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';var n=Date.now();if(n>=Date.parse('2026-11-27T00:00:00+01:00')&&n<=Date.parse('2026-12-01T23:59:59+01:00'))t=localStorage.getItem('vtheme_bf')||'dark';document.documentElement.dataset.theme=t}catch(e){document.documentElement.dataset.theme='dark'}})()</script>
 <style>
 :root{--bg:#0A0A0B;--card:#17171A;--ink:#F6F2F0;--mut:#A3A2A9;--line:#2A2A30;--red:#E5121B;--red2:#FF3B3B;--ov:rgba(0,0,0,.8);--ovt:#fff;--shade:rgba(0,0,0,.55);color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 :root[data-theme=light]{--bg:#F6F2F0;--card:#FFFFFF;--ink:#16161A;--mut:#6B6B73;--line:#DED8D4;--red2:#D40F18;--ov:rgba(255,255,255,.92);--ovt:#16161A;--shade:rgba(20,10,10,.35);color-scheme:light}
@@ -1893,7 +1893,7 @@ if(!subOn()){pending=id;page={k:'sub'};return 'nav'}
 try{await api('/calendar',{method:'POST',body:{eid:id}})}catch(e){if(e.status==402){pending=id;page={k:'sub'};return 'nav'}throw e}
 if(dsel[id]&&dsel[id].length&&sbc){try{await sbc.rpc('set_dists',{p_eid:id,p_dists:dsel[id]})}catch(x){}}await loadMe();pending=null;toast('Añadida a tu calendario deportivo');return 'ok'}
 async function afterAuth(){if(pending){var id=pending;if(subOn()){await participo(id);page={k:'ev',id:id}}else page={k:'sub'}}else page=null}
-function setTheme(t){document.documentElement.dataset.theme=t;try{localStorage.setItem('vtheme',t)}catch(e){}}
+function setTheme(t){document.documentElement.dataset.theme=t;try{localStorage.setItem(bfOn()?'vtheme_bf':'vtheme',t)}catch(e){}}
 /* ---- clics ---- */
 async function doAct(a,v,b){if(a!='menu'&&$('mm'))$('mm').classList.remove('on');if(await podAct(a,v))return;
 if(a=='z'){fb.Z=Math.max(4,Math.min(17,fb.Z+ +v));fbDraw();return}
